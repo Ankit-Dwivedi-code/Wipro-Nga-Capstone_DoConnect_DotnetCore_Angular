@@ -1,0 +1,21 @@
+<mat-toolbar color="primary" class="navbar">
+  <span class="logo">DoConnect</span>
+
+  <span class="spacer"></span>
+
+  <ng-container *ngIf="auth.isLoggedIn(); else guest">
+    <button mat-button routerLink="/questions">Questions</button>
+    <button mat-button routerLink="/questions/ask">Ask</button>
+    <button mat-button *ngIf="auth.getUser()?.role === 'Admin'" routerLink="/admin">Admin</button>
+    <button mat-button (click)="logout()">Logout ({{ auth.getUser()?.name }})</button>
+  </ng-container>
+
+  <ng-template #guest>
+    <button mat-button routerLink="/auth/login">Login</button>
+    <button mat-button routerLink="/auth/register">Register</button>
+  </ng-template>
+</mat-toolbar>
+
+<div class="container">
+  <router-outlet></router-outlet>
+</div>

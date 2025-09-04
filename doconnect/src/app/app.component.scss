@@ -1,0 +1,14 @@
+.navbar {
+  display: flex;
+  justify-content: space-between;
+}
+.spacer {
+  flex: 1 1 auto;
+}
+.container {
+  padding: 16px;
+}
+.logo {
+  font-weight: bold;
+  letter-spacing: 1px;
+}
