@@ -510,3 +510,4 @@ E:\wipro capstone\DoConnect.Api\obj\Debug\net9.0\DoConnect.Api.xml
 E:\wipro capstone\DoConnect.Api\obj\Debug\net9.0\DoConnect.Api.pdb
 E:\wipro capstone\DoConnect.Api\obj\Debug\net9.0\DoConnect.Api.genruntimeconfig.cache
 E:\wipro capstone\DoConnect.Api\obj\Debug\net9.0\ref\DoConnect.Api.dll
+E:\wipro capstone\DoConnect.Api\obj\Debug\net9.0\DoConnect.Api.sourcelink.json

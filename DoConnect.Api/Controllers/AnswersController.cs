@@ -15,76 +15,67 @@ namespace DoConnect.Api.Controllers
     {
         private readonly AppDbContext _db;
         private readonly ImageStorageService _store;
-        public AnswersController(AppDbContext db, ImageStorageService store) { _db = db; _store = store; }
 
-        // [Authorize]
-        // [HttpPost]
-        // public async Task<IActionResult> Create(Guid questionId, [FromForm] AnswerCreateDto dto)
-        // {
-        //     var question = await _db.Questions.FindAsync(questionId);
-        //     if (question == null) return NotFound();
+        public AnswersController(AppDbContext db, ImageStorageService store)
+        {
+            _db = db;
+            _store = store;
+        }
 
-        //     var userId = Guid.Parse(User.FindFirst("sub")!.Value);
-        //     var ans = new Answer { QuestionId = questionId, UserId = userId, Text = dto.Text };
-
-        //     if (dto.Files?.Any() == true)
-        //         ans.Images = await _store.SaveFilesAsync(dto.Files, questionId: null, answerId: ans.Id);
-
-        //     _db.Answers.Add(ans);
-        //     await _db.SaveChangesAsync();
-
-        //     return Created("", new { ans.Id, ans.Text, ans.Status });
-        // }
+        // POST /api/questions/{questionId}/answers
+        // multipart/form-data (Text, Files)
+        // For normal users => Pending by default
         [Authorize]
-[HttpPost]
-public async Task<IActionResult> Create(Guid questionId, [FromForm] AnswerCreateDto dto)
-{
-    var question = await _db.Questions.FindAsync(questionId);
-    if (question == null) return NotFound();
+        [HttpPost]
+        [RequestSizeLimit(25_000_000)]
+        public async Task<IActionResult> Create(Guid questionId, [FromForm] AnswerCreateDto dto)
+        {
+            var question = await _db.Questions.FindAsync(questionId);
+            if (question == null) return NotFound();
 
-    var userIdStr = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? User.FindFirstValue("sub");
-    if (string.IsNullOrEmpty(userIdStr)) return Unauthorized();
-    var userId = Guid.Parse(userIdStr);
+            var userIdStr = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? User.FindFirstValue("sub");
+            if (string.IsNullOrEmpty(userIdStr)) return Unauthorized();
+            var userId = Guid.Parse(userIdStr);
 
-    //  IMPORTANT: give the Answer a real Id BEFORE saving files
-    var ans = new Answer
-    {
-        Id = Guid.NewGuid(),
-        QuestionId = questionId,
-        UserId = userId,
-        Text = dto.Text,
-        Status = ApproveStatus.Pending,
-        CreatedAt = DateTime.UtcNow
-    };
+            var ans = new Answer
+            {
+                Id = Guid.NewGuid(),                 // assign before saving files
+                QuestionId = questionId,
+                UserId = userId,
+                Text = dto.Text,
+                Status = ApproveStatus.Pending,      // user answers are pending
+                CreatedAt = DateTime.UtcNow
+            };
 
-    _db.Answers.Add(ans);
+            _db.Answers.Add(ans);
 
-    if (dto.Files?.Any() == true)
-    {
-        // images will carry AnswerId = ans.Id (non-empty)
-        var imgs = await _store.SaveFilesAsync(dto.Files, questionId: null, answerId: ans.Id);
-        ans.Images = imgs;
-        // _db.Images.AddRange(imgs);
-    }
+            if (dto.Files?.Any() == true)
+            {
+                var imgs = await _store.SaveFilesAsync(dto.Files, questionId: questionId, answerId: ans.Id);
+                ans.Images = imgs;
+                _db.Images.AddRange(imgs);
+            }
 
-    await _db.SaveChangesAsync();
+            await _db.SaveChangesAsync();
+            return Created("", new { ans.Id, ans.Text, ans.Status, ans.CreatedAt });
+        }
 
-    return Created("", new { ans.Id, ans.Text, ans.Status });
-}
-
-
+        // GET /api/questions/{questionId}/answers
         [HttpGet]
         public async Task<IActionResult> List(Guid questionId)
         {
             var isAdmin = User.IsInRole(RoleType.Admin.ToString());
-            var q = _db.Answers
+
+            var query = _db.Answers
                 .Include(a => a.User)
                 .Include(a => a.Images)
                 .Where(a => a.QuestionId == questionId);
 
-            if (!isAdmin) q = q.Where(a => a.Status == ApproveStatus.Approved);
+            if (!isAdmin)
+                query = query.Where(a => a.Status == ApproveStatus.Approved);
 
-            var res = await q.OrderBy(a => a.CreatedAt).ToListAsync();
+            var res = await query.OrderBy(a => a.CreatedAt).ToListAsync();
+
             return Ok(res.Select(a => new AnswerOutDto
             {
                 Id = a.Id,

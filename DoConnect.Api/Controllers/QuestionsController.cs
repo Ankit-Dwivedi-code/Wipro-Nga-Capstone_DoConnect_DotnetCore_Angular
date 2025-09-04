@@ -18,68 +18,45 @@ namespace DoConnect.Api.Controllers
 
         public QuestionsController(AppDbContext db, ImageStorageService store)
         {
-            _db = db; _store = store;
+            _db = db;
+            _store = store;
         }
 
-        // [Authorize]
-        // [HttpPost]
-        // [RequestSizeLimit(25_000_000)]
-        // public async Task<IActionResult> Create([FromForm] QuestionCreateDto dto)
-        // {
-        //     var userId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier) ??
-        //                   User.FindFirstValue("sub")!);
-
-        //     var q = new Question
-        //     {
-        //         Title = dto.Title,
-        //         Text = dto.Text,
-        //         UserId = userId,
-        //         Status = ApproveStatus.Pending
-        //     };
-        //     if (dto.Files?.Any() == true)
-        //         q.Images = await _store.SaveFilesAsync(dto.Files, questionId: q.Id, answerId: null);
-
-        //     _db.Questions.Add(q);
-        //     await _db.SaveChangesAsync();
-
-        //     return CreatedAtAction(nameof(GetById), new { id = q.Id }, ToOutDto(q, includeAuthor: true));
-        // }
+        // POST /api/questions  (multipart/form-data: Title, Text, Files)
         [Authorize]
-[HttpPost]
-[RequestSizeLimit(25_000_000)]
-public async Task<IActionResult> Create([FromForm] QuestionCreateDto dto)
-{
-    var userIdStr = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? User.FindFirstValue("sub");
-    if (string.IsNullOrEmpty(userIdStr)) return Unauthorized();
-    var userId = Guid.Parse(userIdStr);
+        [HttpPost]
+        [RequestSizeLimit(25_000_000)]
+        public async Task<IActionResult> Create([FromForm] QuestionCreateDto dto)
+        {
+            var userIdStr = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? User.FindFirstValue("sub");
+            if (string.IsNullOrEmpty(userIdStr)) return Unauthorized();
+            var userId = Guid.Parse(userIdStr);
 
-    // 🔴 IMPORTANT: give the Question a real Id BEFORE saving files
-    var q = new Question
-    {
-        Id = Guid.NewGuid(),
-        Title = dto.Title,
-        Text = dto.Text,
-        UserId = userId,
-        Status = ApproveStatus.Pending,
-        CreatedAt = DateTime.UtcNow
-    };
+            var q = new Question
+            {
+                Id = Guid.NewGuid(),           // assign before saving files
+                Title = dto.Title,
+                Text = dto.Text,
+                UserId = userId,
+                Status = ApproveStatus.Pending,
+                CreatedAt = DateTime.UtcNow
+            };
 
-    _db.Questions.Add(q);
+            _db.Questions.Add(q);
 
-    if (dto.Files?.Any() == true)
-    {
-        // images will carry QuestionId = q.Id (non-empty)
-        var imgs = await _store.SaveFilesAsync(dto.Files, questionId: q.Id, answerId: null);
-        q.Images = imgs;
-        _db.Images.AddRange(imgs);
-    }
+            if (dto.Files?.Any() == true)
+            {
+                var imgs = await _store.SaveFilesAsync(dto.Files, questionId: q.Id, answerId: null);
+                q.Images = imgs;
+                _db.Images.AddRange(imgs);
+            }
 
-    await _db.SaveChangesAsync();
+            await _db.SaveChangesAsync();
 
-    return CreatedAtAction(nameof(GetById), new { id = q.Id }, ToOutDto(q, includeAuthor: true));
-}
+            return CreatedAtAction(nameof(GetById), new { id = q.Id }, ToOutDto(q, includeAuthor: true));
+        }
 
-
+        // GET /api/questions
         [HttpGet]
         public async Task<IActionResult> List([FromQuery] string? q = null,
                                               [FromQuery] int page = 1,
@@ -87,6 +64,7 @@ public async Task<IActionResult> Create([FromForm] QuestionCreateDto dto)
                                               [FromQuery] bool includePending = false)
         {
             var isAdmin = User.IsInRole(RoleType.Admin.ToString());
+
             var query = _db.Questions
                 .Include(x => x.User)
                 .Include(x => x.Images)
@@ -114,6 +92,7 @@ public async Task<IActionResult> Create([FromForm] QuestionCreateDto dto)
             });
         }
 
+        // GET /api/questions/{id}
         [HttpGet("{id:guid}")]
         public async Task<IActionResult> GetById(Guid id)
         {
@@ -126,7 +105,6 @@ public async Task<IActionResult> Create([FromForm] QuestionCreateDto dto)
 
             if (q == null) return NotFound();
 
-            // non-admins see only approved question & answers
             var isAdmin = User.IsInRole(RoleType.Admin.ToString());
             if (!isAdmin && q.Status != ApproveStatus.Approved) return NotFound();
 
