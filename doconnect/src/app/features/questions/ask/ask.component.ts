@@ -1,57 +1,3 @@
-// // src/app/features/questions/ask/ask.component.ts
-// import { Component } from '@angular/core';
-// import { CommonModule } from '@angular/common';
-// import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
-// import { QuestionService } from '../../../core/question.service';
-// import { MatCardModule } from '@angular/material/card';
-// import { MatFormFieldModule } from '@angular/material/form-field';
-// import { MatInputModule } from '@angular/material/input';
-// import { MatButtonModule } from '@angular/material/button';
-// import { Router } from '@angular/router';
-// import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
-
-// @Component({
-//   standalone: true,
-//   selector: 'app-ask',
-//   imports: [CommonModule, ReactiveFormsModule, MatCardModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatSnackBarModule],
-//   template: `
-//   <mat-card>
-//     <h2>Ask a Question</h2>
-//     <form [formGroup]="f" (ngSubmit)="submit()">
-//       <mat-form-field appearance="outline" class="full"><mat-label>Title</mat-label><input matInput formControlName="title" /></mat-form-field>
-//       <mat-form-field appearance="outline" class="full"><mat-label>Body</mat-label><textarea matInput rows="6" formControlName="body"></textarea></mat-form-field>
-//       <input type="file" (change)="onFiles($event)" multiple />
-//       <div style="margin-top:12px">
-//         <button mat-flat-button color="primary" [disabled]="f.invalid">Post</button>
-//       </div>
-//     </form>
-//   </mat-card>
-//   `,
-//   styles: [`.full{width:100%}`]
-// })
-// export class AskComponent {
-//   f: ReturnType<FormBuilder['group']>;
-//   files: File[] = [];
-//   constructor(private fb: FormBuilder, private qs: QuestionService, private router: Router, private snack: MatSnackBar) {
-//     this.f = this.fb.group({ title: ['', Validators.required], body: ['', Validators.required] });
-//   }
-
-//   onFiles(e: Event) {
-//     const el = e.target as HTMLInputElement;
-//     if (!el.files) return;
-//     this.files = Array.from(el.files);
-//   }
-
-//   submit() {
-//     if (this.f.invalid) return;
-//     this.qs.createQuestion(this.f.value, this.files).subscribe({
-//       next: () => { this.snack.open('Question posted', 'ok', { duration: 1200 }); this.router.navigate(['/questions']); },
-//       error: e => { console.error(e); this.snack.open('Failed', 'ok'); }
-//     });
-//   }
-// }
-
-
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
@@ -64,40 +10,24 @@ import { MatButtonModule } from '@angular/material/button';
 import { Router } from '@angular/router';
 import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
 import { HttpErrorResponse } from '@angular/common/http';
+import { MatIconModule } from '@angular/material/icon';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
   standalone: true,
   selector: 'app-ask',
   imports: [
     CommonModule, ReactiveFormsModule, MatCardModule,
-    MatFormFieldModule, MatInputModule, MatButtonModule, MatSnackBarModule
+    MatFormFieldModule, MatInputModule, MatButtonModule,
+    MatSnackBarModule, MatIconModule, MatProgressSpinnerModule
   ],
-  template: `
-  <mat-card>
-    <h2>Ask a Question</h2>
-    <form [formGroup]="f" (ngSubmit)="submit()">
-      <mat-form-field appearance="outline" class="full">
-        <mat-label>Title</mat-label>
-        <input matInput formControlName="title" />
-      </mat-form-field>
-
-      <mat-form-field appearance="outline" class="full">
-        <mat-label>Body</mat-label>
-        <textarea matInput rows="6" formControlName="body"></textarea>
-      </mat-form-field>
-
-      <input type="file" (change)="onFiles($event)" multiple />
-      <div style="margin-top:12px">
-        <button mat-flat-button color="primary" [disabled]="f.invalid">Post</button>
-      </div>
-    </form>
-  </mat-card>
-  `,
-  styles: [`.full{width:100%}`]
+  templateUrl: './ask.component.html',
+  styleUrls: ['./ask.component.scss']
 })
 export class AskComponent {
   f: ReturnType<FormBuilder['group']>;
   files: File[] = [];
+  loading = false;
 
   constructor(
     private fb: FormBuilder,
@@ -106,44 +36,54 @@ export class AskComponent {
     private router: Router,
     private snack: MatSnackBar
   ) {
-    this.f = this.fb.group({ title: ['', Validators.required], body: ['', Validators.required] });
+    this.f = this.fb.group({
+      title: ['', Validators.required],
+      body: ['', Validators.required]
+    });
   }
 
   onFiles(e: Event) {
     const el = e.target as HTMLInputElement;
-    this.files = el.files ? Array.from(el.files) : [];
+    if (!el.files) return;
+    this.files = [...this.files, ...Array.from(el.files)];
+  }
+
+  removeFile(i: number) {
+    this.files.splice(i, 1);
   }
 
   submit() {
     if (this.f.invalid) return;
     const { title, body } = this.f.value as { title: string; body: string };
 
-    // Build one FormData payload both endpoints accept
+    this.loading = true;
     const fd = new FormData();
     fd.append('Title', title);
     fd.append('Text', body);
     this.files.forEach(f => fd.append('Files', f, f.name));
 
-    // 1) Try admin endpoint (auto-approved)
     this.admin.createQuestionForm(fd).subscribe({
       next: () => {
+        this.loading = false;
         this.snack.open('Question posted (approved)', 'ok', { duration: 1400 });
         this.router.navigate(['/questions']);
       },
       error: (err: HttpErrorResponse) => {
-        // 2) If forbidden/unauthorized, fallback to user endpoint (pending)
         if (err.status === 401 || err.status === 403) {
           this.qs.createQuestion({ title, body }, this.files).subscribe({
             next: () => {
+              this.loading = false;
               this.snack.open('Question posted (pending review)', 'ok', { duration: 1600 });
               this.router.navigate(['/questions']);
             },
             error: e2 => {
+              this.loading = false;
               console.error(e2);
               this.snack.open('Failed to post question', 'ok', { duration: 2000 });
             }
           });
         } else {
+          this.loading = false;
           console.error(err);
           this.snack.open('Failed to post question', 'ok', { duration: 2000 });
         }

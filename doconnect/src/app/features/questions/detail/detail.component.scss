@@ -1,0 +1,117 @@
+$dark-bg: #1a1a1a;
+$card-bg: #212121;
+$accent-yellow: #fbc02d;
+$accent-hover: #ffd600;
+$text-light: #e0e0e0;
+
+.page {
+  background: $dark-bg;
+  min-height: 100vh;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+mat-card {
+  background: $card-bg !important;
+  color: $text-light;
+  border-radius: 10px;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.6);
+  padding: 1.5rem;
+}
+
+.q-title {
+  color: $accent-yellow;
+  margin-bottom: 0.5rem;
+}
+
+.q-text {
+  margin-bottom: 1rem;
+}
+
+.meta {
+  font-size: 0.8rem;
+  color: #aaa;
+}
+
+.imgs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 0.8rem 0;
+
+  img {
+    max-width: 160px;
+    max-height: 120px;
+    object-fit: cover;
+    border-radius: 6px;
+    border: 1px solid #444;
+  }
+}
+
+.answer {
+  padding: 0.8rem 0;
+  border-bottom: 1px solid #333;
+
+  small {
+    color: #bbb;
+  }
+}
+
+.preview {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0.8rem 0;
+
+  .preview-item {
+    position: relative;
+
+    img {
+      max-width: 120px;
+      max-height: 90px;
+      object-fit: cover;
+      border-radius: 6px;
+      border: 1px solid #555;
+    }
+
+    button {
+      position: absolute;
+      top: 2px;
+      right: 2px;
+      background: rgba(0, 0, 0, 0.6);
+      border-radius: 50%;
+    }
+  }
+}
+
+.actions {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: flex-end;
+
+  .post-btn {
+    background-color: $accent-yellow !important;
+    color: #000 !important;
+    font-weight: 600;
+    min-width: 140px;
+
+    &:hover {
+      background-color: $accent-hover !important;
+      box-shadow: 0 0 12px $accent-yellow;
+    }
+
+    ::ng-deep .mat-spinner circle {
+      stroke: #000 !important;
+    }
+  }
+}
+
+@media (max-width: 600px) {
+  .imgs img,
+  .preview img {
+    max-width: 100px;
+    max-height: 80px;
+  }
+}

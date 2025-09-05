@@ -1,2 +1,125 @@
 body { font-family: Roboto, "Helvetica Neue", Arial, sans-serif; }
 mat-card { box-shadow: 0 2px 8px rgba(0,0,0,0.06) }
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Paginator container */
+.mat-mdc-paginator {
+  background: transparent !important;
+  color: #fbc02d !important;
+  font-weight: 600;
+}
+
+/* Range label */
+.mat-mdc-paginator .mat-mdc-paginator-range-label {
+  color: #fbc02d !important;
+}
+
+/* Dropdown (page size) */
+.mat-mdc-paginator .mat-mdc-form-field .mat-mdc-select-value,
+.mat-mdc-paginator .mat-mdc-form-field .mat-mdc-select-arrow {
+  color: #fbc02d !important;
+}
+
+/* Dropdown panel options */
+.mat-mdc-select-panel {
+  background: #fbc02d  !important;
+  color: #fbc02d !important;
+}
+.mat-mdc-option.mdc-list-item--selected {
+  background: rgba(251, 192, 45, 0.2) !important;
+  color: #fbc02d !important;
+}
+
+/* Arrows (prev/next) */
+.mat-mdc-paginator .mat-mdc-icon-button {
+  color: #fbc02d !important;
+}
+.mat-mdc-paginator .mat-mdc-icon-button[disabled] {
+  color: #555 !important;
+}
+.mat-mdc-paginator .mat-mdc-icon-button:hover:not([disabled]) {
+  background: rgba(251, 192, 45, 0.15) !important;
+}
+
+
+/* Tab group background */
+.mat-mdc-tab-group {
+  background: transparent !important;
+}
+
+/* Tab labels (normal) */
+.mat-mdc-tab .mdc-tab__text-label {
+  color: #bbb !important;   /* muted gray for inactive */
+  font-weight: 500;
+}
+
+/* Active tab label */
+.mat-mdc-tab.mdc-tab--active .mdc-tab__text-label {
+  color: #fbc02d !important;  /* your accent yellow */
+  font-weight: 600;
+}
+
+/* Active tab indicator (underline) */
+.mat-mdc-tab-indicator .mdc-tab-indicator__content--underline {
+  border-color: #fbc02d !important;
+}
+
+/* Hover effect on tabs */
+.mat-mdc-tab:hover .mdc-tab__text-label {
+  color: #ffd600 !important;
+}
+
+
+/* 🌙 Dark tab styles */
+.mat-mdc-tab-group {
+  background: #1a1a1a !important; /* dark header background */
+}
+
+/* Inactive tab label */
+.mat-mdc-tab .mdc-tab__text-label {
+  color: #bbb !important;
+  font-weight: 500;
+}
+
+/* Active tab label */
+.mat-mdc-tab.mdc-tab--active .mdc-tab__text-label {
+  color: #fbc02d !important;
+  font-weight: 600;
+}
+
+/* Hover state for tabs */
+.mat-mdc-tab:hover .mdc-tab__text-label {
+  color: #ffd600 !important;
+}
+
+/* Remove dark/black hover overlay */
+.mat-mdc-tab .mdc-tab__ripple::before,
+.mat-mdc-tab .mdc-tab__ripple::after {
+  background-color: rgba(251, 192, 45, 0.1) !important; /* soft yellow glow */
+}
+
+/* Active underline */
+.mat-mdc-tab-indicator .mdc-tab-indicator__content--underline {
+  border-color: #fbc02d !important;
+}
+
+/* 🌟 Input field focus border (switch from blue → yellow) */
+.mdc-text-field--focused .mdc-notched-outline__leading,
+.mdc-text-field--focused .mdc-notched-outline__notch,
+.mdc-text-field--focused .mdc-notched-outline__trailing {
+  border-color: #fbc02d !important;
+}
+
+/* Label when focused */
+.mdc-text-field--focused .mdc-floating-label {
+  color: #fbc02d !important;
+}
+
+/* Caret (blinking cursor) */
+.mdc-text-field__input {
+  caret-color: #fbc02d !important;
+}

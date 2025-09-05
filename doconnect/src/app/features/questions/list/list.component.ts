@@ -25,79 +25,8 @@ import { environment } from '../../../../environments/environment'; // <— add 
     MatInputModule, ReactiveFormsModule, MatListModule,
     MatPaginatorModule, MatIconModule, MatSnackBarModule
   ],
-  template: `
-    <div class="page">
-      <div class="toolbar flex items-center gap-2 mb-4">
-        <mat-form-field appearance="outline" class="flex-1">
-          <mat-label>Search questions</mat-label>
-          <input matInput [formControl]="search" placeholder="Type to search..." />
-        </mat-form-field>
-        <button mat-icon-button color="primary" (click)="onSearchClick()">
-          <mat-icon>search</mat-icon>
-        </button>
-        <button mat-flat-button color="primary" routerLink="/questions/ask">Ask Question</button>
-      </div>
-
-      <ng-container *ngIf="questions.length > 0; else noData">
-        <mat-card *ngFor="let q of questions" class="q-card mb-3">
-          <mat-card-content>
-            <div class="row">
-              <!-- thumbnail (first image) -->
-              <div class="thumb-wrap">
-                <img
-                  *ngIf="q.images?.length; else noImg"
-                  class="thumb"
-                  [src]="asUrl(q.images[0])"
-                  alt="question image" />
-                <ng-template #noImg>
-                  <div class="thumb placeholder">
-                    <mat-icon>image_not_supported</mat-icon>
-                  </div>
-                </ng-template>
-              </div>
-
-              <div class="meta">
-                <mat-card-title class="title">{{ q.title }}</mat-card-title>
-                <p class="snippet">{{ q.text | slice:0:200 }}{{ q.text?.length > 200 ? '…' : '' }}</p>
-                <small>By {{ q.author || 'Anonymous' }} • {{ q.createdAt | date }}</small>
-              </div>
-            </div>
-          </mat-card-content>
-
-          <mat-card-actions>
-            <button mat-button [routerLink]="['/questions', q.id]">View</button>
-            <button
-              *ngIf="isAdmin"
-              mat-button
-              color="warn"
-              (click)="onDelete(q.id, q.title)">
-              <mat-icon style="margin-right:4px">delete</mat-icon>
-              Delete
-            </button>
-          </mat-card-actions>
-        </mat-card>
-
-        <mat-paginator
-          [length]="total" [pageSize]="pageSize"
-          [pageSizeOptions]="[5, 10, 20]"
-          (page)="onPage($event)">
-        </mat-paginator>
-      </ng-container>
-
-      <ng-template #noData>
-        <p class="text-center text-gray-500 mt-6">No question found</p>
-      </ng-template>
-    </div>
-  `,
-  styles: [`
-    .row{display:flex;gap:12px;align-items:flex-start}
-    .thumb-wrap{flex:0 0 auto}
-    .thumb{width:140px;height:100px;object-fit:cover;border-radius:8px;border:1px solid #e5e5e5;background:#fafafa}
-    .placeholder{width:140px;height:100px;display:flex;align-items:center;justify-content:center;border-radius:8px;border:1px dashed #cfcfcf;color:#9e9e9e}
-    .meta{flex:1 1 auto;min-width:0}
-    .title{margin-bottom:6px}
-    .snippet{margin:0 0 6px 0}
-  `]
+  templateUrl: './list.component.html',
+  styleUrls: ['./list.component.scss']
 })
 export class ListComponent implements OnInit {
   search = new FormControl('');

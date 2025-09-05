@@ -1,1 +1,50 @@
-<p>ask works!</p>
+<div class="center">
+  <mat-card class="ask-card">
+    <h2 class="title">Ask a Question</h2>
+
+    <form [formGroup]="f" (ngSubmit)="submit()">
+      <!-- Title -->
+      <mat-form-field appearance="outline" class="full">
+        <mat-label>Title</mat-label>
+        <input matInput formControlName="title" />
+        <mat-error *ngIf="f.get('title')?.touched && f.get('title')?.invalid">
+          Title is required
+        </mat-error>
+      </mat-form-field>
+
+      <!-- Body -->
+      <mat-form-field appearance="outline" class="full">
+        <mat-label>Body</mat-label>
+        <textarea matInput rows="6" formControlName="body"></textarea>
+        <mat-error *ngIf="f.get('body')?.touched && f.get('body')?.invalid">
+          Body is required
+        </mat-error>
+      </mat-form-field>
+
+      <!-- File upload -->
+      <div class="upload">
+        <input type="file" (change)="onFiles($event)" multiple />
+        <div class="file-list" *ngIf="files.length > 0">
+          <div *ngFor="let f of files; let i = index" class="file-item">
+            <mat-icon>attach_file</mat-icon> {{ f.name }}
+            <button mat-icon-button color="warn" type="button" (click)="removeFile(i)">
+              <mat-icon>close</mat-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div class="actions">
+        <button mat-flat-button class="post-btn" [disabled]="f.invalid || loading">
+          <ng-container *ngIf="!loading; else loader">
+            Post Question
+          </ng-container>
+          <ng-template #loader>
+            <mat-spinner diameter="20" strokeWidth="3"></mat-spinner>
+          </ng-template>
+        </button>
+      </div>
+    </form>
+  </mat-card>
+</div>

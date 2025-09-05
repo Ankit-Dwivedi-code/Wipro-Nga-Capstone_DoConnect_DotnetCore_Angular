@@ -4,6 +4,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { NgIf } from '@angular/common';
 import { AuthService } from './core/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -13,6 +14,6 @@ import { AuthService } from './core/auth.service';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  constructor(public auth: AuthService) {}
-  logout() { this.auth.logout(); }
+  constructor(public auth: AuthService, private router: Router) {}
+  logout() { this.auth.logout(); this.router.navigate(['/auth/login']); }
 }

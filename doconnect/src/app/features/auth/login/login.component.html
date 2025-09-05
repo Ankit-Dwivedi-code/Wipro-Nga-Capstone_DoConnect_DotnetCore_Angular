@@ -1,1 +1,46 @@
-<p>login works!</p>
+<div class="center">
+  <mat-card class="auth-card">
+    <h2 class="title">Login</h2>
+
+    <form [formGroup]="f" (ngSubmit)="submit()">
+      <!-- Username -->
+      <mat-form-field appearance="outline" class="full">
+        <mat-label>Username or Email</mat-label>
+        <input matInput formControlName="usernameOrEmail" />
+        <mat-error *ngIf="f.get('usernameOrEmail')?.touched && f.get('usernameOrEmail')?.invalid">
+          Username or Email is required
+        </mat-error>
+      </mat-form-field>
+
+      <!-- Password -->
+      <mat-form-field appearance="outline" class="full">
+        <mat-label>Password</mat-label>
+        <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password" />
+        <button mat-icon-button matSuffix type="button" (click)="hidePassword = !hidePassword">
+          <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+        </button>
+        <mat-error *ngIf="f.get('password')?.touched && f.get('password')?.invalid">
+          Password is required
+        </mat-error>
+      </mat-form-field>
+
+      <!-- Actions -->
+      <div class="actions">
+        <button mat-flat-button class="login-btn" [disabled]="f.invalid || loading">
+          <ng-container *ngIf="!loading; else loader">
+            Login
+          </ng-container>
+          <ng-template #loader>
+            <mat-spinner diameter="20" strokeWidth="3"></mat-spinner>
+          </ng-template>
+        </button>
+      </div>
+    </form>
+
+    <!-- Alternative action -->
+    <div class="alt-action">
+      <span>Don’t have an account?</span>
+      <a routerLink="/auth/register">Register here</a>
+    </div>
+  </mat-card>
+</div>

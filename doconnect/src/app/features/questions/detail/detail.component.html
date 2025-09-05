@@ -1,1 +1,61 @@
-<p>detail works!</p>
+<div class="page">
+  <!-- Question -->
+  <mat-card *ngIf="q" class="question-card">
+    <h2 class="q-title">{{ q.title }}</h2>
+    <p class="q-text">{{ q.text }}</p>
+
+    <div class="imgs" *ngIf="q.images?.length">
+      <img *ngFor="let img of q.images" [src]="asUrl(img)" alt="question image" />
+    </div>
+
+    <small class="meta">By {{ q.author || 'Anon' }} • {{ q.createdAt | date }}</small>
+  </mat-card>
+
+  <!-- Answers -->
+  <mat-card *ngIf="answers?.length" class="answers-card">
+    <h3>Answers</h3>
+    <div *ngFor="let a of answers" class="answer">
+      <p>{{ a.text }}</p>
+      <div class="imgs" *ngIf="a.images?.length">
+        <img *ngFor="let im of a.images" [src]="asUrl(im)" alt="answer image" />
+      </div>
+      <small>
+        By {{ a.author || 'Anon' }} • {{ a.createdAt ? (a.createdAt | date:'short') : '' }}
+        <span *ngIf="a.status && a.status !== 'Approved'"> • ({{ a.status }})</span>
+      </small>
+    </div>
+  </mat-card>
+
+  <!-- Post Answer -->
+  <mat-card class="post-card">
+    <form [formGroup]="f" (ngSubmit)="post()">
+      <mat-form-field class="full" appearance="outline">
+        <mat-label>Your answer</mat-label>
+        <textarea matInput rows="4" formControlName="body"></textarea>
+      </mat-form-field>
+
+      <input type="file" multiple (change)="onFiles($event)" />
+
+      <!-- Preview selected images -->
+      <div class="preview" *ngIf="previewUrls.length > 0">
+        <div *ngFor="let url of previewUrls; let i = index" class="preview-item">
+          <img [src]="url" alt="preview" />
+          <button mat-icon-button color="warn" type="button" (click)="removeFile(i)">
+            <mat-icon>close</mat-icon>
+          </button>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button mat-flat-button class="post-btn" [disabled]="f.invalid || loading">
+          <ng-container *ngIf="!loading; else loader">
+            Post Answer
+          </ng-container>
+          <ng-template #loader>
+            <mat-spinner diameter="20" strokeWidth="3"></mat-spinner>
+          </ng-template>
+        </button>
+      </div>
+    </form>
+  </mat-card>
+</div>

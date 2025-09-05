@@ -1,0 +1,192 @@
+$dark-bg: #1a1a1a;
+$card-bg: #212121;
+$accent-yellow: #fbc02d;
+$accent-hover: #ffd600;
+
+.page {
+  background: $dark-bg;
+  min-height: 100vh;
+  padding: 1rem;
+  color: #e0e0e0;
+}
+
+.toolbar {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  margin-bottom: 1rem;
+
+  .search-box {
+    flex: 1;
+    ::ng-deep .mat-input-element {
+      color: #e0e0e0 !important;
+    }
+    ::ng-deep .mat-form-field-label {
+      color: #bbb !important;
+    }
+    ::ng-deep .mat-form-field-outline {
+      stroke: #666 !important;
+    }
+    ::ng-deep .mat-focused .mat-form-field-outline-thick {
+      stroke: $accent-yellow !important;
+    }
+  }
+
+  .ask-btn {
+    background: $accent-yellow !important;
+    color: #000 !important;
+    font-weight: 600;
+    &:hover {
+      background: $accent-hover !important;
+    }
+  }
+}
+
+.q-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.q-card {
+  background: $card-bg !important;
+  border-radius: 10px;
+  padding: 0.5rem;
+
+  mat-card-title.title {
+    color: $accent-yellow;
+    font-size: 1.2rem;
+    font-weight: 600;
+  }
+
+  .snippet {
+    margin: 0.4rem 0;
+    color: #ddd; // lighter gray for snippet text
+  }
+
+  .info {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: 0.85rem;
+    color: #aaa;
+
+    mat-icon {
+      font-size: 16px;
+      height: 16px;
+      width: 16px;
+    }
+
+    .dot {
+      margin: 0 4px;
+    }
+  }
+
+  .thumb {
+    width: 140px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 8px;
+  }
+
+  .placeholder {
+    width: 140px;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px dashed #666;
+    color: #777;
+    border-radius: 8px;
+  }
+
+  mat-card-actions {
+    display: flex;
+    justify-content: flex-end;
+    padding: 0.5rem 1rem 1rem;
+
+    .view-btn {
+      color: $accent-yellow;
+      font-weight: 600;
+      &:hover {
+        background: rgba(251, 192, 45, 0.1);
+      }
+    }
+
+    .delete-btn {
+      color: #f44336;
+      font-weight: 600;
+      &:hover {
+        background: rgba(244, 67, 54, 0.1);
+      }
+    }
+  }
+}
+
+.empty-state {
+  text-align: center;
+  color: #aaa;
+  margin-top: 3rem;
+
+  mat-icon {
+    font-size: 48px;
+    margin-bottom: 0.5rem;
+    color: $accent-yellow;
+  }
+
+  p {
+    margin: 0.5rem 0;
+    color: #ddd;
+  }
+
+  .ask-btn {
+    border-color: $accent-yellow !important;
+    color: $accent-yellow !important;
+    &:hover {
+      background: $accent-yellow !important;
+      color: #000 !important;
+    }
+  }
+}
+
+::ng-deep .mat-paginator {
+  background: transparent !important;
+  color: #ddd !important;
+}
+
+
+.paginator {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin: 1.5rem 0;
+
+  .page-info {
+    color: #ddd;
+    font-size: 0.9rem;
+  }
+
+  .page-btn {
+    background: #fbc02d;
+    border: none;
+    border-radius: 6px;
+    padding: 6px 14px;
+    font-weight: 600;
+    color: #000;
+    cursor: pointer;
+    transition: 0.2s ease;
+
+    &:hover:not(:disabled) {
+      background: #ffd600;
+      box-shadow: 0 0 10px #fbc02d;
+    }
+
+    &:disabled {
+      background: #555;
+      color: #999;
+      cursor: not-allowed;
+    }
+  }
+}
+

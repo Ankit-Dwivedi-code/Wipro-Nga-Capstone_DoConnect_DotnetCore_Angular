@@ -1,0 +1,109 @@
+$dark-bg: #1a1a1a;
+$card-bg: #212121;
+$accent-yellow: #fbc02d;
+$accent-hover: #ffd600;
+$text-light: #e0e0e0;
+
+.center {
+  display: flex;
+  height: 100vh;
+  align-items: center;
+  justify-content: center;
+  background-color: $dark-bg;
+  padding: 1rem;
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 420px;
+  padding: 2rem;
+  background-color: $card-bg !important;
+  color: $text-light;
+  border-radius: 10px;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.6);
+
+  h2.title {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    color: $accent-yellow;
+    font-weight: 600;
+  }
+
+  .full {
+    width: 100%;
+    margin-bottom: 1rem;
+  }
+
+  mat-form-field {
+    ::ng-deep .mat-form-field-outline {
+      stroke: $accent-yellow !important;
+    }
+    ::ng-deep .mat-form-field-outline-thick {
+      stroke: $accent-hover !important;
+    }
+    ::ng-deep .mat-form-field-label {
+      color: $text-light !important;
+    }
+    ::ng-deep input {
+      color: $text-light !important;
+    }
+    ::ng-deep .mat-form-field-ripple {
+      background-color: $accent-yellow !important;
+    }
+    ::ng-deep mat-icon {
+      color: $accent-yellow !important;
+    }
+  }
+
+  .actions {
+    display: flex;
+    justify-content: center;
+    margin-top: 1rem;
+
+    .register-btn {
+      background-color: $accent-yellow !important;
+      color: #000 !important;
+      font-weight: 600;
+      min-width: 140px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 0.5rem;
+
+      &:hover {
+        background-color: $accent-hover !important;
+        box-shadow: 0 0 12px $accent-yellow;
+      }
+
+      ::ng-deep .mat-spinner circle {
+        stroke: #000 !important;
+      }
+    }
+  }
+
+  .alt-action {
+    margin-top: 1.5rem;
+    text-align: center;
+    font-size: 0.9rem;
+    color: $text-light;
+
+    a {
+      color: $accent-yellow;
+      font-weight: 600;
+      margin-left: 0.3rem;
+      text-decoration: none;
+
+      &:hover {
+        text-decoration: underline;
+        color: $accent-hover;
+      }
+    }
+  }
+}
+
+@media (max-width: 500px) {
+  .auth-card {
+    padding: 1.5rem;
+    max-width: 100%;
+  }
+}

@@ -1,0 +1,164 @@
+// Theme colors
+$dark-bg: #1a1a1a;
+$card-bg: #212121;
+$accent-yellow: #fbc02d;
+$accent-hover: #ffd600;
+$text-light: #e0e0e0;
+
+.center {
+  display: flex;
+  height: 100vh;
+  align-items: center;
+  justify-content: center;
+  background-color: $dark-bg;
+  padding: 1rem; // spacing for mobile
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 380px;
+  padding: 2rem;
+  background-color: $card-bg !important;
+  color: $text-light;
+  border-radius: 10px;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.6);
+
+  h2.title {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    color: $accent-yellow;
+    font-weight: 600;
+  }
+
+  .full {
+    width: 100%;
+    margin-bottom: 1rem;
+  }
+
+  // Fix Angular Material input styles
+  mat-form-field {
+    width: 100%;
+
+    ::ng-deep .mat-form-field-outline {
+      stroke: $accent-yellow !important;
+    }
+
+    ::ng-deep .mat-form-field-outline-thick {
+      stroke: $accent-hover !important; // active focus border
+    }
+
+    ::ng-deep .mat-form-field-label {
+      color: $text-light !important;
+    }
+
+    ::ng-deep input {
+      color: $text-light !important;
+    }
+
+    ::ng-deep .mat-form-field-ripple {
+      background-color: $accent-yellow !important; // underline when focused
+    }
+  }
+
+  .actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 1rem;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .login-btn {
+    background-color: $accent-yellow !important;
+    color: #000 !important;
+    font-weight: 600;
+    flex: 1;
+
+    &:hover {
+      background-color: $accent-hover !important;
+      box-shadow: 0 0 12px $accent-yellow;
+    }
+  }
+
+  .register-btn {
+    color: $accent-yellow !important;
+    flex: 1;
+    text-align: right;
+
+    &:hover {
+      text-shadow: 0 0 6px rgba(251, 192, 45, 0.7);
+    }
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 500px) {
+  .auth-card {
+    padding: 1.5rem;
+    max-width: 100%;
+  }
+
+  .actions {
+    flex-direction: column;
+    align-items: stretch;
+
+    .login-btn,
+    .register-btn {
+      width: 100%;
+      text-align: center;
+    }
+  }
+}
+
+
+$accent-yellow: #fbc02d;
+$accent-hover: #ffd600;
+$card-bg: #212121;
+$text-light: #e0e0e0;
+
+.auth-card {
+  .actions {
+    margin-top: 1rem;
+    display: flex;
+    justify-content: center;
+
+    .login-btn {
+      background-color: $accent-yellow !important;
+      color: #000 !important;
+      font-weight: 600;
+      min-width: 120px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 0.5rem;
+
+      &:hover {
+        background-color: $accent-hover !important;
+        box-shadow: 0 0 12px $accent-yellow;
+      }
+
+      ::ng-deep .mat-spinner circle {
+        stroke: #000 !important; // black stroke inside yellow button
+      }
+    }
+  }
+
+  .alt-action {
+    margin-top: 1.5rem;
+    text-align: center;
+    font-size: 0.9rem;
+    color: $text-light;
+
+    a {
+      color: $accent-yellow;
+      font-weight: 600;
+      margin-left: 0.3rem;
+      text-decoration: none;
+
+      &:hover {
+        text-decoration: underline;
+        color: $accent-hover;
+      }
+    }
+  }
+}

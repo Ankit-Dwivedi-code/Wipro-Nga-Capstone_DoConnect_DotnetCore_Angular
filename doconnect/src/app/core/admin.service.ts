@@ -1,13 +1,16 @@
+// src/app/core/admin.service.ts
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpResponse } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { AnswerDto, QuestionDto } from './question.service';
 import { catchError, map, of } from 'rxjs';
+import { AuthService } from './auth.service';
 
 @Injectable({ providedIn: 'root' })
 export class AdminService {
   private api = `${environment.apiUrl}/admin`;
-  constructor(private http: HttpClient) {}
+
+  constructor(private http: HttpClient, private auth: AuthService) {}
 
   // ---- Moderation ----
   approveQuestion(id: string) { return this.http.post(`${this.api}/questions/${id}/approve`, {}); }
@@ -15,19 +18,14 @@ export class AdminService {
   approveAnswer(id: string)   { return this.http.post(`${this.api}/answers/${id}/approve`, {}); }
   rejectAnswer(id: string)    { return this.http.post(`${this.api}/answers/${id}/reject`, {}); }
 
-  // getPendingQuestions() { return this.http.get<any[]>(`${this.api}/questions/pending`); }
-  // getPendingAnswers()   { return this.http.get<any[]>(`${this.api}/answers/pending`); }
-
-  // src/app/core/admin.service.ts
-getPendingQuestions() {
-  return this.http.get<any[]>(`${this.api}/questions/pending`)
-    .pipe(catchError(() => of([]))); // no popup
-}
-getPendingAnswers() {
-  return this.http.get<any[]>(`${this.api}/answers/pending`)
-    .pipe(catchError(() => of([])));
-}
-
+  getPendingQuestions() {
+    return this.http.get<any[]>(`${this.api}/questions/pending`)
+      .pipe(catchError(() => of([]))); // no popup
+  }
+  getPendingAnswers() {
+    return this.http.get<any[]>(`${this.api}/answers/pending`)
+      .pipe(catchError(() => of([])));
+  }
 
   // ---- Admin create QUESTION (auto-approved) ----
   createQuestionForm(formData: FormData) {
@@ -52,21 +50,20 @@ getPendingAnswers() {
     return this.postAnswerForm(questionId, fd);
   }
 
-  // ---- NEW: Robust admin check (server-authoritative) ----
+  // ---- NEW: Robust admin check ----
   checkAdmin() {
-  // OPTIONAL: if you have an interceptor showing snackbars on 401,
-  // you can mark this request as "silent" and make the interceptor skip toasts
-  // const headers = new HttpHeaders({ 'X-Silent-Auth': '1' });
+    // ✅ If no token, don’t bother hitting backend
+    if (!this.auth.getToken()) {
+      return of(false);
+    }
 
-  return this.http
-    .get<{ role?: string }>(`${environment.apiUrl}/auth/me` /*, { headers }*/)
-    .pipe(
+    return this.http.get<{ role?: string }>(`${environment.apiUrl}/auth/me`).pipe(
       map(me => me?.role === 'Admin'),
       catchError(() => of(false)) // never throw/popup
     );
-}
+  }
 
-  // Existing:
+  // ---- Delete ----
   deleteQuestion(id: string) {
     return this.http.delete(`${this.api}/questions/${id}`);
   }

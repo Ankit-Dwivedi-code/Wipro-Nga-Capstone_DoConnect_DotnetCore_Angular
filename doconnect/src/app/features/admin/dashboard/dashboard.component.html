@@ -1,1 +1,47 @@
-<p>dashboard works!</p>
+<div class="page">
+  <h2 class="title">Admin Dashboard</h2>
+
+  <mat-tab-group mat-stretch-tabs>
+    <!-- Pending Questions Tab -->
+    <mat-tab label="Pending Questions">
+      <ng-container *ngIf="questions.length; else noQuestions">
+        <mat-card *ngFor="let q of questions" class="q-card">
+          <mat-card-title>{{ q.title }}</mat-card-title>
+          <mat-card-content>{{ q.text | slice:0:150 }}{{ q.text?.length > 150 ? '…' : '' }}</mat-card-content>
+          <mat-card-actions>
+            <button mat-stroked-button color="primary" (click)="approveQuestion(q.id)">
+              <mat-icon>check_circle</mat-icon> Approve
+            </button>
+            <button mat-stroked-button color="warn" (click)="rejectQuestion(q.id)">
+              <mat-icon>cancel</mat-icon> Reject
+            </button>
+          </mat-card-actions>
+        </mat-card>
+      </ng-container>
+      <ng-template #noQuestions>
+        <p class="empty">No pending questions</p>
+      </ng-template>
+    </mat-tab>
+
+    <!-- Pending Answers Tab -->
+    <mat-tab label="Pending Answers">
+      <ng-container *ngIf="answers.length; else noAnswers">
+        <mat-card *ngFor="let a of answers" class="q-card">
+          <mat-card-title>Answer to: {{ a.questionTitle }}</mat-card-title>
+          <mat-card-content>{{ a.text | slice:0:150 }}{{ a.text?.length > 150 ? '…' : '' }}</mat-card-content>
+          <mat-card-actions>
+            <button mat-stroked-button color="primary" (click)="approveAnswer(a.id)">
+              <mat-icon>check_circle</mat-icon> Approve
+            </button>
+            <button mat-stroked-button color="warn" (click)="rejectAnswer(a.id)">
+              <mat-icon>cancel</mat-icon> Reject
+            </button>
+          </mat-card-actions>
+        </mat-card>
+      </ng-container>
+      <ng-template #noAnswers>
+        <p class="empty">No pending answers</p>
+      </ng-template>
+    </mat-tab>
+  </mat-tab-group>
+</div>

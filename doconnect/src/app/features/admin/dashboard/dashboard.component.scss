@@ -1,0 +1,63 @@
+$card-bg: #212121;
+$dark-bg: #1a1a1a;
+$accent-yellow: #fbc02d;
+$accent-hover: #ffd600;
+$text-light: #f5f5f5;
+$text-muted: #bdbdbd;
+
+.page {
+  background: $dark-bg;
+  min-height: 100vh;
+  padding: 1rem;
+}
+
+.title {
+  color: $accent-yellow;
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+mat-card {
+  background: $card-bg !important;
+  color: $text-light !important; // enforce light text globally in cards
+  margin-bottom: 1rem;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
+
+  mat-card-title {
+    font-weight: 600;
+    color: $accent-yellow !important;
+  }
+
+  // enforce card content text color
+  ::ng-deep .mat-card-content {
+    color: $text-light !important;
+    font-size: 0.95rem;
+    line-height: 1.4;
+  }
+
+  mat-card-actions {
+    display: flex;
+    gap: 0.8rem;
+  }
+}
+
+.empty {
+  text-align: center;
+  color: $text-muted;
+  margin-top: 1rem;
+}
+
+// Tabs style
+::ng-deep .mat-tab-label {
+  color: $text-muted !important;
+}
+
+::ng-deep .mat-tab-label.mat-tab-label-active {
+  color: $accent-yellow !important;
+  font-weight: 600;
+}
+
+::ng-deep .mat-ink-bar {
+  background-color: $accent-yellow !important;
+}

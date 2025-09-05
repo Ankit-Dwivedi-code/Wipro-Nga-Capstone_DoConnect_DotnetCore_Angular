@@ -1,0 +1,122 @@
+$dark-bg: #1a1a1a;
+$card-bg: #212121;
+$accent-yellow: #fbc02d;
+$accent-hover: #ffd600;
+$text-light: #e0e0e0;
+
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: $dark-bg;
+  min-height: 100vh;
+  padding: 1rem;
+}
+
+.ask-card {
+  width: 100%;
+  max-width: 600px;
+  padding: 2rem;
+  background: $card-bg !important;
+  color: $text-light;
+  border-radius: 10px;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.6);
+
+  h2.title {
+    color: $accent-yellow;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    text-align: center;
+  }
+
+  .full {
+    width: 100%;
+    margin-bottom: 1rem;
+  }
+
+  mat-form-field {
+    ::ng-deep .mat-form-field-outline {
+      stroke: $accent-yellow !important;
+    }
+    ::ng-deep .mat-form-field-outline-thick {
+      stroke: $accent-hover !important;
+    }
+    ::ng-deep .mat-form-field-label {
+      color: $text-light !important;
+    }
+    ::ng-deep textarea,
+    ::ng-deep input {
+      color: $text-light !important;
+    }
+    ::ng-deep .mat-form-field-ripple {
+      background-color: $accent-yellow !important;
+    }
+  }
+
+  .upload {
+    margin: 1rem 0;
+
+    input[type="file"] {
+      color: $text-light;
+      margin-bottom: 0.5rem;
+    }
+
+    .file-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+
+      .file-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background: #2a2a2a;
+        padding: 0.3rem 0.6rem;
+        border-radius: 6px;
+        font-size: 0.9rem;
+
+        mat-icon {
+          font-size: 18px;
+          margin-right: 4px;
+          color: $accent-yellow;
+        }
+
+        button {
+          color: #f44336 !important;
+        }
+      }
+    }
+  }
+
+  .actions {
+    display: flex;
+    justify-content: center;
+    margin-top: 1rem;
+
+    .post-btn {
+      background-color: $accent-yellow !important;
+      color: #000 !important;
+      font-weight: 600;
+      min-width: 140px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 0.5rem;
+
+      &:hover {
+        background-color: $accent-hover !important;
+        box-shadow: 0 0 12px $accent-yellow;
+      }
+
+      ::ng-deep .mat-spinner circle {
+        stroke: #000 !important;
+      }
+    }
+  }
+}
+
+@media (max-width: 600px) {
+  .ask-card {
+    padding: 1.5rem;
+  }
+}
