@@ -75,7 +75,7 @@ dotnet run
 - Browse **Swagger** at your API URL → `/swagger`
 - Import the included **Postman collection** (`docs/DoConnect.postman_collection.json`) and set the `{{baseUrl}}` variable (e.g., `http://localhost:5108`).
 
-## 7) Tests (if included)
+## 7) Tests for backend
 ```bash
 dotnet test
 ```
