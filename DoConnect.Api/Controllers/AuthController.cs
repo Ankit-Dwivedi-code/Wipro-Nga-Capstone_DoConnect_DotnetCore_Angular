@@ -1,3 +1,5 @@
+// Here we define the AuthController which handles user registration, login, and fetching authenticated user details. It uses JWT for authentication and BCrypt for password hashing.
+
 using DoConnect.Api.Data;
 using DoConnect.Api.Dtos;
 using DoConnect.Api.Models;

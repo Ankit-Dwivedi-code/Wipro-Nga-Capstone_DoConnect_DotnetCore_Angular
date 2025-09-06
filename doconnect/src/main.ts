@@ -11,11 +11,11 @@ import { ErrorInterceptor } from './app/core/error.interceptor';
 
 bootstrapApplication(AppComponent, {
   providers: [
-    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
-    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true }, // Register the JWT interceptor
+    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true }, // Register the error interceptor
 
-    provideRouter(routes),
-    importProvidersFrom(HttpClientModule),
-    provideAnimations(),   // ✅ replace BrowserAnimationsModule
+    provideRouter(routes), // Provide the routes
+    importProvidersFrom(HttpClientModule), // Import HttpClientModule
+    provideAnimations(),   // Angular Material animations
   ],
 }).catch(err => console.error(err));

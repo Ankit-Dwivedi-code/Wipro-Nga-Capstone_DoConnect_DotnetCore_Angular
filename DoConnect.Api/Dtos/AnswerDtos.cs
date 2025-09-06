@@ -1,3 +1,5 @@
+// Here we define the data transfer objects (DTOs) for creating and outputting answers. The AnswerCreateDto is used when creating a new answer, while the AnswerOutDto is used for returning answer details in responses.
+
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Http;
 

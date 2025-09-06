@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
+import { ReactiveFormsModule, FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { QuestionService } from '../../../core/question.service';
 import { AdminService } from '../../../core/admin.service';
 import { MatCardModule } from '@angular/material/card';
@@ -25,8 +25,12 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
   styleUrls: ['./ask.component.scss']
 })
 export class AskComponent {
-  f: ReturnType<FormBuilder['group']>;
-  files: File[] = [];
+  f: FormGroup;
+
+  // single required file + preview
+  selectedFile: File | null = null;
+  previewUrl: string | null = null;
+
   loading = false;
 
   constructor(
@@ -38,56 +42,95 @@ export class AskComponent {
   ) {
     this.f = this.fb.group({
       title: ['', Validators.required],
-      body: ['', Validators.required]
+      body: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(4000)]],
+      // this control is just for validation/UI; we update it when a file is chosen/removed
+      file: [null, Validators.required]
     });
   }
 
-  onFiles(e: Event) {
-    const el = e.target as HTMLInputElement;
-    if (!el.files) return;
-    this.files = [...this.files, ...Array.from(el.files)];
+  // handle single file pick
+  onFile(e: Event) {
+    const input = e.target as HTMLInputElement;
+    const file = input.files && input.files.length ? input.files[0] : null;
+
+    // cleanup previous preview
+    if (this.previewUrl) {
+      URL.revokeObjectURL(this.previewUrl);
+      this.previewUrl = null;
+    }
+
+    this.selectedFile = file;
+
+    if (file) {
+      this.previewUrl = URL.createObjectURL(file);
+      this.f.get('file')?.setValue('picked'); // mark as present for required validator
+      this.f.get('file')?.markAsTouched();
+    } else {
+      this.f.get('file')?.setValue(null);
+      this.f.get('file')?.markAsTouched();
+    }
+
+    // allow re-selecting the same file
+    if (input) input.value = '';
   }
 
-  removeFile(i: number) {
-    this.files.splice(i, 1);
+  removeFile() {
+    if (this.previewUrl) {
+      URL.revokeObjectURL(this.previewUrl);
+    }
+    this.selectedFile = null;
+    this.previewUrl = null;
+    this.f.get('file')?.setValue(null);
+    this.f.get('file')?.markAsTouched();
   }
 
   submit() {
-    if (this.f.invalid) return;
-    const { title, body } = this.f.value as { title: string; body: string };
+    if (this.f.invalid) {
+      this.f.markAllAsTouched();
+      this.snack.open('Please fill all required fields and add an image.', 'ok', { duration: 1600 });
+      return;
+    }
 
+    const { title, body } = this.f.value as { title: string; body: string };
     this.loading = true;
+
     const fd = new FormData();
     fd.append('Title', title);
     fd.append('Text', body);
-    this.files.forEach(f => fd.append('Files', f, f.name));
+    // keep using 'Files' key for compatibility with your backend; just one file
+    if (this.selectedFile) {
+      fd.append('Files', this.selectedFile, this.selectedFile.name);
+    }
 
+    // try admin endpoint first; on 401/403, fallback to user endpoint
     this.admin.createQuestionForm(fd).subscribe({
-      next: () => {
-        this.loading = false;
-        this.snack.open('Question posted (approved)', 'ok', { duration: 1400 });
-        this.router.navigate(['/questions']);
-      },
+      next: () => this.onSuccess(true),
       error: (err: HttpErrorResponse) => {
         if (err.status === 401 || err.status === 403) {
-          this.qs.createQuestion({ title, body }, this.files).subscribe({
-            next: () => {
-              this.loading = false;
-              this.snack.open('Question posted (pending review)', 'ok', { duration: 1600 });
-              this.router.navigate(['/questions']);
-            },
-            error: e2 => {
-              this.loading = false;
-              console.error(e2);
-              this.snack.open('Failed to post question', 'ok', { duration: 2000 });
-            }
+          this.qs.createQuestion({ title, body }, this.selectedFile ? [this.selectedFile] : []).subscribe({
+            next: () => this.onSuccess(false),
+            error: e2 => this.onError(e2)
           });
         } else {
-          this.loading = false;
-          console.error(err);
-          this.snack.open('Failed to post question', 'ok', { duration: 2000 });
+          this.onError(err);
         }
       }
     });
+  }
+
+  private onSuccess(wasAdmin: boolean) {
+    this.loading = false;
+    this.snack.open(
+      wasAdmin ? 'Question posted (approved)' : 'Question posted (pending review)',
+      'ok',
+      { duration: 1500 }
+    );
+    this.router.navigate(['/questions']);
+  }
+
+  private onError(err: any) {
+    this.loading = false;
+    console.error(err);
+    this.snack.open('Failed to post question', 'ok', { duration: 2000 });
   }
 }

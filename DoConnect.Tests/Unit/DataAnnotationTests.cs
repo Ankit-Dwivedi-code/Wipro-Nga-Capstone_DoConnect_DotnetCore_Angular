@@ -1,3 +1,6 @@
+// Using C# 13.0 features
+// Here we define unit tests to validate data annotations on various DTOs and models used in the DoConnect application. The tests ensure that required fields, maximum lengths, and formats are correctly enforced.
+
 using System.Linq;
 using DoConnect.Api.Dtos;
 using DoConnect.Api.Models;

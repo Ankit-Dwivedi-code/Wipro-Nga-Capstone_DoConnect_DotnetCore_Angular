@@ -1,3 +1,6 @@
+// Here we define the AdminController which handles administrative actions such as approving/rejecting questions and answers, deleting questions, and managing review queues. Admins can also create questions and post answers that are auto-approved.
+
+
 using DoConnect.Api.Data;
 using DoConnect.Api.Dtos;
 using DoConnect.Api.Models;
@@ -6,7 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
-
+using System.Text;
 namespace DoConnect.Api.Controllers
 {
     [ApiController]
@@ -31,7 +34,8 @@ namespace DoConnect.Api.Controllers
             var userIdStr = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? User.FindFirstValue("sub");
             if (string.IsNullOrEmpty(userIdStr)) return Unauthorized();
             var userId = Guid.Parse(userIdStr);
-
+            // India Standard Time : added as ist
+            var istZone = TimeZoneInfo.FindSystemTimeZoneById("India Standard Time");
             var q = new Question
             {
                 Id = Guid.NewGuid(),           // assign before saving files
@@ -39,7 +43,8 @@ namespace DoConnect.Api.Controllers
                 Text = dto.Text,
                 UserId = userId,
                 Status = ApproveStatus.Pending,
-                CreatedAt = DateTime.UtcNow
+                // CreatedAt = DateTime.UtcNow   // UTC time
+                CreatedAt = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, istZone)
             };
 
             _db.Questions.Add(q);

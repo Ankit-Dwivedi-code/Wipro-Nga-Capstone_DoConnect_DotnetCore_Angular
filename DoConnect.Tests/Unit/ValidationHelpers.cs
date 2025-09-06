@@ -1,3 +1,6 @@
+// Using C# 13.0 features
+// Here we define a helper class to validate objects using DataAnnotations. This is useful for unit tests to ensure that models and DTOs conform to their validation attributes.
+
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 

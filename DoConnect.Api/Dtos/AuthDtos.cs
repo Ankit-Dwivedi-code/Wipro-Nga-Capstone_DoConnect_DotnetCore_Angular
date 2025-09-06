@@ -1,3 +1,5 @@
+// Here we define the data transfer objects (DTOs) for user registration and login. The RegisterDto is used for user registration, while the LoginDto is used for user login.
+
 using System.ComponentModel.DataAnnotations;
 
 namespace DoConnect.Api.Dtos

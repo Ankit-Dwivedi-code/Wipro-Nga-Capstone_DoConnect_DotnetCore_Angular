@@ -2,12 +2,12 @@
   <mat-card class="ask-card">
     <h2 class="title">Ask a Question</h2>
 
-    <form [formGroup]="f" (ngSubmit)="submit()">
+    <form [formGroup]="f" (ngSubmit)="submit()" novalidate>
       <!-- Title -->
       <mat-form-field appearance="outline" class="full">
         <mat-label>Title</mat-label>
-        <input matInput formControlName="title" />
-        <mat-error *ngIf="f.get('title')?.touched && f.get('title')?.invalid">
+        <input matInput formControlName="title" required />
+        <mat-error *ngIf="f.get('title')?.hasError('required')">
           Title is required
         </mat-error>
       </mat-form-field>
@@ -15,22 +15,67 @@
       <!-- Body -->
       <mat-form-field appearance="outline" class="full">
         <mat-label>Body</mat-label>
-        <textarea matInput rows="6" formControlName="body"></textarea>
-        <mat-error *ngIf="f.get('body')?.touched && f.get('body')?.invalid">
+        <textarea
+          matInput
+          rows="6"
+          formControlName="body"
+          required
+          placeholder="Describe your question clearly..."
+        ></textarea>
+        <mat-hint align="start">{{ f.get('body')?.value?.length || 0 }} / 4000</mat-hint>
+        <mat-error *ngIf="f.get('body')?.hasError('required')">
           Body is required
+        </mat-error>
+        <mat-error *ngIf="f.get('body')?.hasError('minlength')">
+          Please write at least 10 characters
+        </mat-error>
+        <mat-error *ngIf="f.get('body')?.hasError('maxlength')">
+          Keep it under 4000 characters
         </mat-error>
       </mat-form-field>
 
-      <!-- File upload -->
-      <div class="upload">
-        <input type="file" (change)="onFiles($event)" multiple />
-        <div class="file-list" *ngIf="files.length > 0">
-          <div *ngFor="let f of files; let i = index" class="file-item">
-            <mat-icon>attach_file</mat-icon> {{ f.name }}
-            <button mat-icon-button color="warn" type="button" (click)="removeFile(i)">
-              <mat-icon>close</mat-icon>
-            </button>
+      <!-- File upload (required) -->
+      <div class="upload-row" [class.invalid]="f.get('file')?.invalid && f.get('file')?.touched">
+        <div class="upload-text">
+          <mat-icon>cloud_upload</mat-icon>
+          <div>
+            <strong>Upload an image</strong>
+            <div class="muted">PNG or JPG only</div>
           </div>
+        </div>
+
+        <button mat-stroked-button type="button" (click)="fileInput.click()">
+          Choose file
+        </button>
+
+        <input
+          #fileInput
+          type="file"
+          accept="image/png,image/jpeg"
+          (change)="onFile($event)"
+          hidden
+          required
+        />
+      </div>
+
+      <mat-error *ngIf="f.get('file')?.hasError('required') && f.get('file')?.touched">
+        An image is required
+      </mat-error>
+
+      <!-- Preview -->
+      <div class="preview" *ngIf="previewUrl">
+        <div class="preview-item">
+          <img [src]="previewUrl" alt="question image preview" />
+          <button
+            mat-mini-fab
+            color="warn"
+            type="button"
+            class="remove-btn"
+            (click)="removeFile()"
+            aria-label="Remove image"
+          >
+            <mat-icon>close</mat-icon>
+          </button>
         </div>
       </div>
 

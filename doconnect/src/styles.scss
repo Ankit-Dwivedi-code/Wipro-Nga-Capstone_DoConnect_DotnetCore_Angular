@@ -123,3 +123,42 @@ mat-card { box-shadow: 0 2px 8px rgba(0,0,0,0.06) }
 .mdc-text-field__input {
   caret-color: #fbc02d !important;
 }
+/* 🌟 Input field styles (global overrides) */
+
+/* Default input text + label color */
+.mdc-text-field__input {
+  color: #e0e0e0 !important;
+  caret-color: #fbc02d !important; /* yellow caret */
+}
+
+.mdc-floating-label {
+  color: #bbb !important; /* unfocused label */
+}
+
+/* Hover state — prevent black overlay, keep outline gray */
+.mdc-text-field:hover .mdc-notched-outline__leading,
+.mdc-text-field:hover .mdc-notched-outline__notch,
+.mdc-text-field:hover .mdc-notched-outline__trailing {
+  border-color: #888 !important; /* soft gray border */
+}
+
+.mdc-text-field:hover .mdc-floating-label {
+  color: #ddd !important; /* label a bit brighter */
+}
+
+/* Focus state — yellow border + label */
+.mdc-text-field--focused .mdc-notched-outline__leading,
+.mdc-text-field--focused .mdc-notched-outline__notch,
+.mdc-text-field--focused .mdc-notched-outline__trailing {
+  border-color: #fbc02d !important; /* yellow border */
+}
+
+.mdc-text-field--focused .mdc-floating-label {
+  color: #fbc02d !important; /* yellow label */
+}
+
+/* Remove black hover background overlay */
+.mdc-text-field .mdc-line-ripple::before,
+.mdc-text-field .mdc-line-ripple::after {
+  background-color: transparent !important;
+}

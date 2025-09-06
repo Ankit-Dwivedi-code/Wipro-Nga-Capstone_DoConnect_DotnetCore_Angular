@@ -1,4 +1,5 @@
-// DoConnect.Tests/Unit/Services/JwtTokenService_MoqTests.cs
+// Using C# 13.0 features
+// Here we define unit tests for the JwtTokenService using Moq to mock dependencies. The tests verify that JWT tokens are created correctly and contain the expected claims.
 using System.IdentityModel.Tokens.Jwt;
 using DoConnect.Api.Models;
 using DoConnect.Api.Services;

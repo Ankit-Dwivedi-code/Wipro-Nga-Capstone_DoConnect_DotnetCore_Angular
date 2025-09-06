@@ -20,7 +20,7 @@ export class AdminService {
 
   getPendingQuestions() {
     return this.http.get<any[]>(`${this.api}/questions/pending`)
-      .pipe(catchError(() => of([]))); // no popup
+      .pipe(catchError(() => of([]))); 
   }
   getPendingAnswers() {
     return this.http.get<any[]>(`${this.api}/answers/pending`)
@@ -50,16 +50,16 @@ export class AdminService {
     return this.postAnswerForm(questionId, fd);
   }
 
-  // ---- NEW: Robust admin check ----
+  // admin check ----
   checkAdmin() {
-    // ✅ If no token, don’t bother hitting backend
+    
     if (!this.auth.getToken()) {
       return of(false);
     }
 
     return this.http.get<{ role?: string }>(`${environment.apiUrl}/auth/me`).pipe(
       map(me => me?.role === 'Admin'),
-      catchError(() => of(false)) // never throw/popup
+      catchError(() => of(false)) 
     );
   }
 

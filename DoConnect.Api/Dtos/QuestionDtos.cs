@@ -1,3 +1,6 @@
+// Using C# 13.0 features
+// Here we define the data transfer objects (DTOs) for creating and outputting questions. The QuestionCreateDto is used when creating a new question, while the QuestionOutDto is used for returning question details in responses.
+
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Http;
 

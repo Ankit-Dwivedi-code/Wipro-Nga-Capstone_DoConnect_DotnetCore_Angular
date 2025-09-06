@@ -1,3 +1,6 @@
+// Using C# 13.0 features
+// Here we define the Question model which represents a question posted by a user in the application.
+
 using System.ComponentModel.DataAnnotations;
 
 namespace DoConnect.Api.Models

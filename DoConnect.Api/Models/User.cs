@@ -1,3 +1,6 @@
+// Using C# 13.0 features
+// Here we define the User model which represents a user in the application. It includes properties for username, email, password hash, role, and navigation properties for related questions and answers.
+
 using System.ComponentModel.DataAnnotations;
 
 namespace DoConnect.Api.Models

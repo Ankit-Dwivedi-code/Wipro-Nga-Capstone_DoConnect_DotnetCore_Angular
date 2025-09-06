@@ -35,6 +35,7 @@ namespace DoConnect.Api.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Status")
+                        .HasMaxLength(20)
                         .HasColumnType("int");
 
                     b.Property<string>("Text")
@@ -47,9 +48,11 @@ namespace DoConnect.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("QuestionId");
+                    b.HasIndex("CreatedAt");
 
                     b.HasIndex("UserId");
+
+                    b.HasIndex("QuestionId", "UserId");
 
                     b.ToTable("Answers");
                 });
@@ -65,7 +68,8 @@ namespace DoConnect.Api.Migrations
 
                     b.Property<string>("Path")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<Guid?>("QuestionId")
                         .HasColumnType("uniqueidentifier");
@@ -95,6 +99,7 @@ namespace DoConnect.Api.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<int>("Status")
+                        .HasMaxLength(20)
                         .HasColumnType("int");
 
                     b.Property<string>("Text")
@@ -104,13 +109,15 @@ namespace DoConnect.Api.Migrations
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasMaxLength(140)
-                        .HasColumnType("nvarchar(140)");
+                        .HasMaxLength(120)
+                        .HasColumnType("nvarchar(120)");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CreatedAt");
 
                     b.HasIndex("UserId");
 
@@ -128,20 +135,21 @@ namespace DoConnect.Api.Migrations
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasMaxLength(120)
-                        .HasColumnType("nvarchar(120)");
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
 
                     b.Property<string>("PasswordHash")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<int>("Role")
                         .HasColumnType("int");
 
                     b.Property<string>("Username")
                         .IsRequired()
-                        .HasMaxLength(40)
-                        .HasColumnType("nvarchar(40)");
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
 
                     b.HasKey("Id");
 

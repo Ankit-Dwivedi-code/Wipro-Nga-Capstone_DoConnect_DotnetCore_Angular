@@ -1,3 +1,6 @@
+// Using C# 13.0 features
+// Here we define the Answer model which represents an answer to a question in the application. It
+
 using System.ComponentModel.DataAnnotations;
 
 namespace DoConnect.Api.Models

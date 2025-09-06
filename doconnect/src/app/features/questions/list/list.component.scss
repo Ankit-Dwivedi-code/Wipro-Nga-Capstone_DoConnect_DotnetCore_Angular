@@ -36,9 +36,7 @@ $accent-hover: #ffd600;
     background: $accent-yellow !important;
     color: #000 !important;
     font-weight: 600;
-    &:hover {
-      background: $accent-hover !important;
-    }
+    &:hover { background: $accent-hover !important; }
   }
 }
 
@@ -61,7 +59,7 @@ $accent-hover: #ffd600;
 
   .snippet {
     margin: 0.4rem 0;
-    color: #ddd; // lighter gray for snippet text
+    color: #ddd;
   }
 
   .info {
@@ -77,9 +75,12 @@ $accent-hover: #ffd600;
       width: 16px;
     }
 
-    .dot {
-      margin: 0 4px;
-    }
+    .dot { margin: 0 4px; }
+  }
+
+  .row {
+    display: flex;
+    gap: 1rem;
   }
 
   .thumb {
@@ -87,6 +88,12 @@ $accent-hover: #ffd600;
     height: 100px;
     object-fit: cover;
     border-radius: 8px;
+    cursor: zoom-in;
+    transition: transform .18s ease, box-shadow .18s ease;
+    &:hover {
+      transform: translateY(-2px) scale(1.02);
+      box-shadow: 0 6px 18px rgba(0,0,0,0.45);
+    }
   }
 
   .placeholder {
@@ -108,17 +115,13 @@ $accent-hover: #ffd600;
     .view-btn {
       color: $accent-yellow;
       font-weight: 600;
-      &:hover {
-        background: rgba(251, 192, 45, 0.1);
-      }
+      &:hover { background: rgba(251, 192, 45, 0.1); }
     }
 
     .delete-btn {
       color: #f44336;
       font-weight: 600;
-      &:hover {
-        background: rgba(244, 67, 54, 0.1);
-      }
+      &:hover { background: rgba(244, 67, 54, 0.1); }
     }
   }
 }
@@ -134,10 +137,7 @@ $accent-hover: #ffd600;
     color: $accent-yellow;
   }
 
-  p {
-    margin: 0.5rem 0;
-    color: #ddd;
-  }
+  p { margin: 0.5rem 0; color: #ddd; }
 
   .ask-btn {
     border-color: $accent-yellow !important;
@@ -154,7 +154,7 @@ $accent-hover: #ffd600;
   color: #ddd !important;
 }
 
-
+/* Optional custom paginator buttons (if used somewhere) */
 .paginator {
   display: flex;
   justify-content: center;
@@ -181,7 +181,6 @@ $accent-hover: #ffd600;
       background: #ffd600;
       box-shadow: 0 0 10px #fbc02d;
     }
-
     &:disabled {
       background: #555;
       color: #999;
@@ -190,3 +189,41 @@ $accent-hover: #ffd600;
   }
 }
 
+/* ===== Lightbox viewer (same UX as detail page) ===== */
+.img-viewer {
+  position: fixed;
+  inset: 0;
+  background: rgba(2, 6, 23, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  cursor: zoom-out;
+  animation: fadeIn 120ms ease-out;
+}
+
+.img-viewer img {
+  max-width: 92vw;
+  max-height: 92vh;
+  border-radius: 10px;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.5);
+  transition: transform .18s ease;
+  cursor: default;
+}
+
+.viewer-close {
+  position: fixed;
+  top: 14px;
+  right: 16px;
+  font-size: 32px;
+  line-height: 1;
+  border: 0;
+  background: transparent;
+  color: #fff;
+  cursor: pointer;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}

@@ -21,19 +21,22 @@
       <mat-card *ngFor="let q of questions" class="q-card">
         <mat-card-content>
           <div class="row">
-            <!-- Thumbnail -->
-            <div class="thumb-wrap">
-              <img
-                *ngIf="q.images?.length; else noImg"
-                class="thumb"
-                [src]="asUrl(q.images[0])"
-                alt="question image" />
-              <ng-template #noImg>
-                <div class="thumb placeholder">
-                  <mat-icon>image_not_supported</mat-icon>
-                </div>
-              </ng-template>
-            </div>
+            <!-- Thumbnail (uses question-only thumb; fetches detail lazily once) -->
+            <ng-container *ngIf="thumbUrl(q) as thumb">
+              <div class="thumb-wrap" *ngIf="thumb; else noImg">
+                <img
+                  class="thumb"
+                  [src]="thumb"
+                  alt="question image"
+                  (click)="openViewer(thumb)"
+                />
+              </div>
+            </ng-container>
+            <ng-template #noImg>
+              <div class="thumb placeholder">
+                <mat-icon>image_not_supported</mat-icon>
+              </div>
+            </ng-template>
 
             <!-- Meta -->
             <div class="meta">
@@ -79,4 +82,12 @@
       </button>
     </div>
   </ng-template>
+</div>
+
+<!-- Image Viewer (Lightbox) -->
+<div class="img-viewer" *ngIf="viewerUrl" (click)="closeViewer()">
+  <img [src]="viewerUrl" alt="full view" (click)="$event.stopPropagation()" />
+  <button class="viewer-close" type="button" (click)="closeViewer()" aria-label="Close">
+    &times;
+  </button>
 </div>

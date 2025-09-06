@@ -1,5 +1,5 @@
 // src/app/core/models.ts
-export interface User { id?: number; name?: string; email?: string; role?: string; }
+export interface User { id?: number; Username?: string; email?: string; role?: string; }
 export interface AuthResponse { token: string; expiresIn?: number; user: User; }
 // Login
 export interface LoginDto {

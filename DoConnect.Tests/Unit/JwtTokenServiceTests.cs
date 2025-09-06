@@ -1,3 +1,5 @@
+// Using C# 13.0 features
+// Here we define unit tests for the JwtTokenService to ensure that JWT tokens are created correctly and contain the expected claims.
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;

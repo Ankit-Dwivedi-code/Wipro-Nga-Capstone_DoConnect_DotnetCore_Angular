@@ -15,15 +15,15 @@ export class AdminGuard implements CanActivate, CanMatch {
   }
 
   private isAdmin$(): Observable<boolean | UrlTree> {
-    // ✅ 1. Check local cache first
+    // 1. Check local cache first
     const user = this.auth.getUser?.();
     if (user?.role === 'Admin') return of(true);
 
-    // ✅ 2. If no token → definitely not admin, skip API call
+    //  2. If no token → definitely not admin, skip API call
     const token = this.auth.getToken();
     if (!token) return of(this.redirect());
 
-    // ✅ 3. Ask server only if logged in
+    // 3. Ask server only if logged in
     return this.http.get<{ role?: string }>(`${environment.apiUrl}/auth/me`).pipe(
       map(me => me?.role === 'Admin' ? true : this.redirect()),
       catchError(() => of(this.redirect()))

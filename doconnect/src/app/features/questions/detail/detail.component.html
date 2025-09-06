@@ -4,8 +4,14 @@
     <h2 class="q-title">{{ q.title }}</h2>
     <p class="q-text">{{ q.text }}</p>
 
-    <div class="imgs" *ngIf="q.images?.length">
-      <img *ngFor="let img of q.images" [src]="asUrl(img)" alt="question image" />
+    <!-- ONLY the question's own images -->
+    <div class="imgs" *ngIf="questionImages?.length">
+      <img
+        *ngFor="let img of questionImages"
+        [src]="asUrl(img)"
+        alt="question image"
+        (click)="openViewer(asUrl(img))"
+      />
     </div>
 
     <small class="meta">By {{ q.author || 'Anon' }} • {{ q.createdAt | date }}</small>
@@ -16,9 +22,16 @@
     <h3>Answers</h3>
     <div *ngFor="let a of answers" class="answer">
       <p>{{ a.text }}</p>
+
       <div class="imgs" *ngIf="a.images?.length">
-        <img *ngFor="let im of a.images" [src]="asUrl(im)" alt="answer image" />
+        <img
+          *ngFor="let im of a.images"
+          [src]="asUrl(im)"
+          alt="answer image"
+          (click)="openViewer(asUrl(im))"
+        />
       </div>
+
       <small>
         By {{ a.author || 'Anon' }} • {{ a.createdAt ? (a.createdAt | date:'short') : '' }}
         <span *ngIf="a.status && a.status !== 'Approved'"> • ({{ a.status }})</span>
@@ -28,19 +41,79 @@
 
   <!-- Post Answer -->
   <mat-card class="post-card">
-    <form [formGroup]="f" (ngSubmit)="post()">
+    <form [formGroup]="f" (ngSubmit)="post()" novalidate>
+      <!-- Required Answer -->
       <mat-form-field class="full" appearance="outline">
         <mat-label>Your answer</mat-label>
-        <textarea matInput rows="4" formControlName="body"></textarea>
+        <textarea
+          matInput
+          rows="5"
+          formControlName="body"
+          required
+          cdkTextareaAutosize
+          cdkAutosizeMinRows="4"
+          cdkAutosizeMaxRows="12"
+          placeholder="Type a helpful, clear answer..."
+        ></textarea>
+
+        <mat-hint align="start">{{ f.get('body')?.value?.length || 0 }} / 4000</mat-hint>
+        <mat-error *ngIf="f.get('body')?.hasError('required')">
+          Answer is required.
+        </mat-error>
+        <mat-error *ngIf="f.get('body')?.hasError('minlength')">
+          Please write at least 10 characters.
+        </mat-error>
+        <mat-error *ngIf="f.get('body')?.hasError('maxlength')">
+          Keep it under 4000 characters.
+        </mat-error>
       </mat-form-field>
 
-      <input type="file" multiple (change)="onFiles($event)" />
+      <!-- Fancy Upload (Optional) -->
+      <div
+        class="dropzone"
+        (dragover)="onDragOver($event)"
+        (dragleave)="onDragLeave($event)"
+        (drop)="onDrop($event)"
+        [class.dragover]="isDragOver"
+        tabindex="0"
+        (keydown.enter)="fileInput.click()"
+        (keydown.space)="fileInput.click()"
+        aria-label="Upload images"
+      >
+        <div class="dz-content">
+          <mat-icon>cloud_upload</mat-icon>
+          <div>
+            <strong>Upload images (optional)</strong>
+            <div class="muted">PNG, JPG or JPEG • up to {{ maxFiles }} files • {{ maxMb }}MB each</div>
+          </div>
+        </div>
+
+        <button mat-stroked-button type="button" (click)="fileInput.click()">
+          Choose files
+        </button>
+        <input
+          #fileInput
+          type="file"
+          accept="image/png,image/jpeg"
+          multiple
+          (change)="onFiles($event)"
+          hidden
+        />
+      </div>
+
+      <!-- Validation for files (client-side soft rules) -->
+      <div class="file-errors" *ngIf="fileErrors.length">
+        <mat-icon>error_outline</mat-icon>
+        <ul>
+          <li *ngFor="let e of fileErrors">{{ e }}</li>
+        </ul>
+      </div>
 
       <!-- Preview selected images -->
       <div class="preview" *ngIf="previewUrls.length > 0">
-        <div *ngFor="let url of previewUrls; let i = index" class="preview-item">
-          <img [src]="url" alt="preview" />
-          <button mat-icon-button color="warn" type="button" (click)="removeFile(i)">
+        <div *ngFor="let url of previewUrls; let i = index" class="preview-item" [attr.aria-label]="'image ' + (i+1)">
+          <img [src]="url" alt="image preview" />
+          <button mat-mini-fab color="warn" type="button" class="remove-btn" (click)="removeFile(i)">
             <mat-icon>close</mat-icon>
           </button>
         </div>
@@ -58,4 +131,17 @@
       </div>
     </form>
   </mat-card>
+</div>
+
+<!-- Initial Loader (optional) -->
+<div class="loader" *ngIf="loading && !q">
+  <mat-spinner diameter="50" strokeWidth="4"></mat-spinner>
+</div>
+
+<!-- Image Viewer (Lightbox) -->
+<div class="img-viewer" *ngIf="viewerUrl" (click)="closeViewer()">
+  <img [src]="viewerUrl" alt="full view" (click)="$event.stopPropagation()" />
+  <button class="viewer-close" type="button" (click)="closeViewer()" aria-label="Close">
+    &times;
+  </button>
 </div>

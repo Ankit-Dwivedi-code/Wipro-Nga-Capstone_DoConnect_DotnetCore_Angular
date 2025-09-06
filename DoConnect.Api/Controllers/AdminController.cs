@@ -1,3 +1,5 @@
+// Here we define the AdminController which handles administrative actions such as approving/rejecting questions and answers, deleting questions, and managing review queues. Admins can also create questions and post answers that are auto-approved.
+
 using DoConnect.Api.Data;
 using DoConnect.Api.Dtos;
 using DoConnect.Api.Models;
@@ -135,7 +137,7 @@ namespace DoConnect.Api.Controllers
             }));
         }
 
-        // --- NEW: Admin can post an answer (auto-approved) ---
+        // --- Admin can post an answer (auto-approved) ---
         // POST /api/admin/questions/{questionId}/answers
         // multipart/form-data: Text (required), Files (optional)
         [HttpPost("questions/{questionId:guid}/answers")]
@@ -185,7 +187,7 @@ namespace DoConnect.Api.Controllers
         }
 
 
-        // --- NEW: Admin can create a question (auto-approved) ---
+        // --- Admin can create a question (auto-approved) ---
         // POST /api/admin/questions
         // multipart/form-data: Title (required), Text (required), Files (optional)
         [HttpPost("questions")]

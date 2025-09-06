@@ -16,5 +16,17 @@
         <member name="M:DoConnect.Api.Migrations.InitialCreate.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
             <inheritdoc />
         </member>
+        <member name="T:DoConnect.Api.Migrations.SecurityValidation_Indexes">
+            <inheritdoc />
+        </member>
+        <member name="M:DoConnect.Api.Migrations.SecurityValidation_Indexes.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:DoConnect.Api.Migrations.SecurityValidation_Indexes.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:DoConnect.Api.Migrations.SecurityValidation_Indexes.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
     </members>
 </doc>

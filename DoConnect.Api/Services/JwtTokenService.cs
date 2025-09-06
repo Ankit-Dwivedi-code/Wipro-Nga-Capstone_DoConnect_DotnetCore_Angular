@@ -1,3 +1,6 @@
+// Using C# 13.0 features
+// Here we define the JwtTokenService which is responsible for creating JWT tokens for authenticated users. It uses settings defined in JwtSettings for token configuration such as key, issuer, audience, and expiration time.
+
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;

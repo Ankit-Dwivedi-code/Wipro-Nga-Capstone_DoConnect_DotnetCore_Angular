@@ -150,9 +150,17 @@
         "net9.0": {
           "targetAlias": "net9.0",
           "dependencies": {
+            "Bogus": {
+              "target": "Package",
+              "version": "[35.6.3, )"
+            },
             "FluentAssertions": {
               "target": "Package",
-              "version": "[6.12.1, )"
+              "version": "[8.6.0, )"
+            },
+            "Microsoft.AspNetCore.Mvc.Testing": {
+              "target": "Package",
+              "version": "[9.0.8, )"
             },
             "Microsoft.Data.SqlClient": {
               "target": "Package",
@@ -163,6 +171,14 @@
               "version": "[9.0.0, )"
             },
             "Microsoft.EntityFrameworkCore.SqlServer": {
+              "target": "Package",
+              "version": "[9.0.8, )"
+            },
+            "Microsoft.EntityFrameworkCore.Sqlite": {
+              "target": "Package",
+              "version": "[9.0.8, )"
+            },
+            "Microsoft.Extensions.Options": {
               "target": "Package",
               "version": "[9.0.8, )"
             },

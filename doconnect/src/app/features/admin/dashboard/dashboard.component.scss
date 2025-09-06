@@ -1,63 +1,212 @@
-$card-bg: #212121;
-$dark-bg: #1a1a1a;
+/* ==== Premium Dark Variables ==== */
+$bg-0: #0f1115;
+$bg-1: #111418;
+$bg-2: #0b0d11;
+$card-bg: rgba(22, 25, 31, 0.72); /* translucent glass */
+$card-border: rgba(255, 255, 255, 0.07);
+$shadow-1: 0 8px 24px rgba(0, 0, 0, 0.35), 0 2px 6px rgba(0, 0, 0, 0.25);
+$shadow-2: 0 14px 38px rgba(0, 0, 0, 0.45), 0 4px 10px rgba(0, 0, 0, 0.28);
+
 $accent-yellow: #fbc02d;
 $accent-hover: #ffd600;
-$text-light: #f5f5f5;
-$text-muted: #bdbdbd;
+$accent-teal: #2dd4bf;
+$accent-blue: #60a5fa;
 
+$text-strong: #f5f7fb;
+$text-light: #d3d7e3;
+$text-muted: #99a0af;
+$outline: rgba(96, 165, 250, 0.25);
+
+/* ==== Page Canvas ==== */
 .page {
-  background: $dark-bg;
   min-height: 100vh;
-  padding: 1rem;
+  padding: 1.25rem clamp(1rem, 2.5vw, 2rem);
+
+  /* layered gradient + soft grid pattern for depth */
+  background:
+    radial-gradient(1200px 400px at 10% -10%, rgba(96, 165, 250, 0.12), transparent 60%),
+    radial-gradient(1200px 400px at 90% -10%, rgba(45, 212, 191, 0.10), transparent 60%),
+    linear-gradient(180deg, $bg-0 0%, $bg-1 60%, $bg-2 100%);
+  color: $text-light;
+
+  /* optional: faint grid texture */
+  position: relative;
+  &::before {
+    content: "";
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px);
+    background-size: 24px 24px;
+    mask-image: radial-gradient(1000px 500px at 50% -10%, #000 30%, transparent 100%);
+    pointer-events: none;
+  }
 }
 
+/* ==== Title ==== */
 .title {
-  color: $accent-yellow;
-  margin-bottom: 1rem;
-  font-weight: 600;
+  margin: 0 0 1.2rem 0;
+  font-weight: 800;
+  letter-spacing: .2px;
+  font-size: clamp(1.3rem, 2.2vw, 1.6rem);
+  background: linear-gradient(90deg, $accent-yellow, $accent-teal 40%, $accent-blue 80%);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+  text-shadow: 0 0 24px rgba(251, 192, 45, 0.12);
 }
 
+/* ==== Card ==== */
 mat-card {
   background: $card-bg !important;
-  color: $text-light !important; // enforce light text globally in cards
+  border: 1px solid $card-border;
+  border-radius: 14px;
+  box-shadow: $shadow-1;
+  backdrop-filter: blur(10px) saturate(1.2);
+  color: $text-strong !important;
   margin-bottom: 1rem;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
+  transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
 
-  mat-card-title {
-    font-weight: 600;
-    color: $accent-yellow !important;
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: $shadow-2;
+    border-color: rgba(255,255,255,0.12);
   }
 
-  // enforce card content text color
+  mat-card-title {
+    color: $accent-yellow !important;
+    font-weight: 700;
+    letter-spacing: .2px;
+  }
+
+  /* content text */
+  ::ng-deep .mat-mdc-card-content,
   ::ng-deep .mat-card-content {
     color: $text-light !important;
-    font-size: 0.95rem;
-    line-height: 1.4;
+    font-size: .98rem;
+    line-height: 1.45;
   }
 
   mat-card-actions {
     display: flex;
-    gap: 0.8rem;
+    gap: .75rem;
+    padding-bottom: .9rem;
   }
 }
 
+/* ==== Buttons (stroked) ==== */
+::ng-deep .mat-mdc-outlined-button,
+::ng-deep .mat-stroked-button {
+  --btn-border: rgba(255,255,255,0.16);
+  border-color: var(--btn-border) !important;
+  color: $text-strong !important;
+  backdrop-filter: blur(6px);
+  transition: border-color .18s ease, box-shadow .18s ease, transform .18s ease;
+
+  &:hover {
+    transform: translateY(-1px);
+    border-color: rgba(255,255,255,0.28) !important;
+    box-shadow: 0 8px 18px rgba(0,0,0,0.35);
+  }
+}
+
+/* primary / warn accents on stroked buttons */
+::ng-deep .mat-mdc-outlined-button.mat-primary,
+::ng-deep .mat-stroked-button.mat-primary {
+  border-color: rgba(251, 192, 45, 0.4) !important;
+  color: $accent-yellow !important;
+
+  &:hover {
+    border-color: rgba(251, 192, 45, 0.65) !important;
+    box-shadow: 0 0 0 3px rgba(251, 192, 45, 0.15);
+  }
+}
+::ng-deep .mat-mdc-outlined-button.mat-warn,
+::ng-deep .mat-stroked-button.mat-warn {
+  border-color: rgba(244, 67, 54, 0.35) !important;
+  color: #ff6b6b !important;
+
+  &:hover {
+    border-color: rgba(244, 67, 54, 0.6) !important;
+    box-shadow: 0 0 0 3px rgba(244, 67, 54, 0.14);
+  }
+}
+
+/* icons in actions */
+mat-card-actions mat-icon {
+  font-size: 18px; height: 18px; width: 18px; margin-right: 6px;
+}
+
+/* ==== Tabs ==== */
+::ng-deep .mat-mdc-tab-group,
+::ng-deep .mat-tab-group {
+  background: transparent !important;
+}
+
+::ng-deep .mat-mdc-tab-header,
+::ng-deep .mat-tab-header {
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  margin-bottom: .75rem;
+}
+
+::ng-deep .mat-mdc-tab-labels .mdc-tab,
+::ng-deep .mat-tab-label {
+  color: $text-muted !important;
+  font-weight: 600;
+  letter-spacing: .2px;
+  opacity: .9;
+  transition: color .18s ease, opacity .18s ease, transform .18s ease;
+
+  &:hover {
+    color: $text-light !important;
+    opacity: 1;
+    transform: translateY(-1px);
+  }
+}
+
+::ng-deep .mat-mdc-tab-labels .mdc-tab--active .mdc-tab__text-label,
+::ng-deep .mat-tab-label.mat-tab-label-active {
+  color: $accent-yellow !important;
+}
+
+::ng-deep .mat-mdc-tab-indicator .mdc-tab-indicator__content--underline,
+::ng-deep .mat-ink-bar {
+  background: linear-gradient(90deg, $accent-yellow, $accent-teal);
+  height: 3px !important;
+  border-radius: 2px;
+  box-shadow: 0 0 18px rgba(251,192,45,0.25);
+}
+
+/* ==== Empty State ==== */
 .empty {
   text-align: center;
   color: $text-muted;
   margin-top: 1rem;
+  font-size: .98rem;
 }
 
-// Tabs style
-::ng-deep .mat-tab-label {
-  color: $text-muted !important;
+/* ==== Micro-details ==== */
+.q-card { /* hook for future admin-only card tweaks */ }
+
+::selection { background: rgba(251, 192, 45, 0.25); color: #fff; }
+
+/* subtle focus ring for accessibility */
+:focus-visible {
+  outline: 2px solid $outline;
+  outline-offset: 2px;
+  border-radius: 10px;
 }
 
-::ng-deep .mat-tab-label.mat-tab-label-active {
-  color: $accent-yellow !important;
-  font-weight: 600;
+/* slim scrollbars (WebKit) */
+*::-webkit-scrollbar { height: 10px; width: 10px; }
+*::-webkit-scrollbar-track { background: rgba(255,255,255,0.05); }
+*::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, rgba(251,192,45,0.8), rgba(45,212,191,0.8));
+  border-radius: 10px;
+  border: 2px solid rgba(0,0,0,0.15);
 }
 
-::ng-deep .mat-ink-bar {
-  background-color: $accent-yellow !important;
+/* small entrance anim for cards */
+@keyframes cardIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
+mat-card { animation: cardIn .25s ease-out; }

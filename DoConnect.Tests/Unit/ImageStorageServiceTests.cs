@@ -1,3 +1,5 @@
+// Using C# 13.0 features
+// Here we define unit tests for the ImageStorageService using Moq to mock dependencies. The tests verify that image files are saved correctly to the web root and that the returned ImageFile objects have the expected properties set.
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
