@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("DoConnect.Api")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+51f5f3068a3b9f5925f0c132fa2c97bcf41103a7")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+11ddfd196b7d271493a54e23dd2cfa9c8a78a35c")]
 [assembly: System.Reflection.AssemblyProductAttribute("DoConnect.Api")]
 [assembly: System.Reflection.AssemblyTitleAttribute("DoConnect.Api")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

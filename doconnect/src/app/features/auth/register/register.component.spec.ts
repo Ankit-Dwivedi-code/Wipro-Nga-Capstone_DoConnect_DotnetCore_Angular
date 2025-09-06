@@ -1,23 +1,22 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { RegisterComponent } from './register.component';
+import { TestBed } from '@angular/core/testing';
+import { RegisterComponent } from './register.component'; // adjust path
+import { MockAuthService, commonImports, commonSchemas, provideMatSnackBarStub } from '../../..//../testing/mocks';
+import { AuthService } from '../../../core/auth.service';
 
 describe('RegisterComponent', () => {
-  let component: RegisterComponent;
-  let fixture: ComponentFixture<RegisterComponent>;
-
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [RegisterComponent]
-    })
-    .compileComponents();
-
-    fixture = TestBed.createComponent(RegisterComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+      imports: [RegisterComponent, ...commonImports],
+      providers: [
+        { provide: AuthService, useClass: MockAuthService },
+        provideMatSnackBarStub
+      ],
+      schemas: [...commonSchemas]
+    }).compileComponents();
   });
 
   it('should create', () => {
-    expect(component).toBeTruthy();
+    const fixture = TestBed.createComponent(RegisterComponent);
+    expect(fixture.componentInstance).toBeTruthy();
   });
 });

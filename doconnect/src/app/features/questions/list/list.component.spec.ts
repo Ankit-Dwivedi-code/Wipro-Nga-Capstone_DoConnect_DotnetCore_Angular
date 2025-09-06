@@ -1,23 +1,21 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { ListComponent } from './list.component';
+import { QuestionService } from '../../../core/question.service';
+
+import { MockQuestionService, commonImports, commonSchemas } from '../../../../testing/mocks';
 
 describe('ListComponent', () => {
-  let component: ListComponent;
-  let fixture: ComponentFixture<ListComponent>;
-
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ListComponent]
-    })
-    .compileComponents();
-
-    fixture = TestBed.createComponent(ListComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+      imports: [ListComponent, ...commonImports],
+      providers: [{ provide: QuestionService, useClass: MockQuestionService }],
+      schemas: [...commonSchemas]
+    }).compileComponents();
   });
 
   it('should create', () => {
-    expect(component).toBeTruthy();
+    const fixture = TestBed.createComponent(ListComponent);
+    expect(fixture.componentInstance).toBeTruthy();
   });
+  
 });
