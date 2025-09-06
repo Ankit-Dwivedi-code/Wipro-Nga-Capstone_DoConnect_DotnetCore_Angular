@@ -1,14 +1,37 @@
 <mat-toolbar color="primary" class="navbar">
-  <!-- <img class="logo" src="../../src/assets/Logo.svg" alt="DoConnect" /> -->
-
   <span routerLink="/questions" style="cursor: pointer;" class="logo">DoConnect</span>
 
   <span class="spacer"></span>
 
   <ng-container *ngIf="auth.isLoggedIn(); else guest">
+    
     <button mat-button routerLink="/questions">Questions</button>
     <button mat-button routerLink="/questions/ask">Ask</button>
-    <button mat-button *ngIf="auth.getUser()?.role === 'Admin'" routerLink="/admin">Admin</button>
+    
+
+    <!-- Admin-only management buttons -->
+    <ng-container *ngIf="auth.getUser()?.role === 'Admin'">
+      <button mat-button routerLink="/admin" aria-label="Manage questions and answers">
+        Manage Q/A
+      </button>
+      <button mat-button routerLink="/admin/users" aria-label="Manage users">
+        Manage Users
+      </button>
+    </ng-container>
+
+    <!-- User only -->
+    <ng-container *ngIf="auth.getUser()?.role === 'User'">
+      <button
+  mat-raised-button
+  routerLink="/ask-ai"
+  class="ask-ai-btn"
+  aria-label="Ask AI"
+>
+  <mat-icon class="spark">auto_awesome</mat-icon>
+  <span>Ask AI</span>
+</button>
+    </ng-container>
+
     <button mat-button (click)="logout()">Logout</button>
   </ng-container>
 

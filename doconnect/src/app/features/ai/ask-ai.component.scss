@@ -1,0 +1,39 @@
+$bg-0: #0f1115; $bg-1: #111418; $bg-2: #0b0d11;
+$card-bg: rgba(22,25,31,.72); $card-border: rgba(255,255,255,.07);
+$shadow-1: 0 8px 24px rgba(0,0,0,.35), 0 2px 6px rgba(0,0,0,.25);
+$shadow-2: 0 14px 38px rgba(0,0,0,.45), 0 4px 10px rgba(0,0,0,.28);
+$accent-yellow:#fbc02d; $accent-teal:#2dd4bf; $accent-blue:#60a5fa;
+$text-strong:#f5f7fb; $text-light:#d3d7e3; $text-muted:#99a0af; $outline: rgba(96,165,250,.25);
+
+.page.ai-page {
+  min-height: 100vh; padding: 1.25rem clamp(1rem,2.5vw,2rem);
+  background:
+    radial-gradient(1200px 400px at 10% -10%, rgba(96,165,250,.12), transparent 60%),
+    radial-gradient(1200px 400px at 90% -10%, rgba(45,212,191,.10), transparent 60%),
+    linear-gradient(180deg, $bg-0 0%, $bg-1 60%, $bg-2 100%);
+  color: $text-light; position: relative;
+}
+.title { margin: 0 0 1rem; font-weight: 800; letter-spacing:.2px; font-size: clamp(1.3rem,2.2vw,1.6rem);
+  background: linear-gradient(90deg,$accent-yellow,$accent-teal 40%,$accent-blue 80%);
+  -webkit-background-clip:text; background-clip:text; color:transparent; text-shadow:0 0 24px rgba(251,192,45,.12);
+}
+.card {
+  background:$card-bg; border:1px solid $card-border; border-radius:14px; box-shadow:$shadow-1; backdrop-filter: blur(10px) saturate(1.2);
+  padding:14px; margin-bottom:1rem; transition: transform .18s ease, box-shadow .18s ease;
+  &:hover { transform: translateY(-2px); box-shadow:$shadow-2; }
+  h3 { color:$accent-yellow; font-weight:700; margin:4px 0 10px; }
+}
+.grid-form { display:grid; grid-template-columns:1fr; gap:12px; }
+label { display:flex; flex-direction:column; gap:6px; font-size:14px; }
+textarea {
+  padding:10px 12px; border:1px solid $card-border; border-radius:10px; background:rgba(255,255,255,.06); color:$text-strong;
+  &:focus { border-color: rgba(96,165,250,.55); box-shadow: 0 0 0 3px rgba(96,165,250,.15); outline:none; }
+}
+.btn { border:1px solid rgba(255,255,255,.16); background:transparent; color:$text-strong; padding:8px 12px; border-radius:10px; cursor:pointer; }
+.btn-primary { border-color: rgba(251,192,45,.4); color: $accent-yellow;
+  &:hover{ border-color: rgba(251,192,45,.65); box-shadow:0 0 0 3px rgba(251,192,45,.15); }
+}
+.err { color:#ff6b6b; }
+.answer { white-space: pre-wrap; color:$text-strong; line-height:1.45; }
+.model { color:$text-muted; font-weight: 400; font-size:.9rem; }
+:focus-visible { outline:2px solid $outline; outline-offset:2px; border-radius:10px; }

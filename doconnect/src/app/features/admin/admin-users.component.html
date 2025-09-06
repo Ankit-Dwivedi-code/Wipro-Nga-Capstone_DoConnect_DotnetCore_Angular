@@ -1,0 +1,102 @@
+<div class="page admin-users-page">
+  <h2 class="title">Admin • Users</h2>
+
+  <div class="messages">
+    <div class="ok" *ngIf="success()">{{ success() }}</div>
+    <div class="err" *ngIf="error()">{{ error() }}</div>
+  </div>
+
+  <div class="toolbar card">
+    <input
+      type="search"
+      class="search"
+      placeholder="Search username/email…"
+      [ngModel]="search()"
+      (ngModelChange)="search.set($event); load()" />
+    <div class="hint">Press Enter to reload after typing</div>
+  </div>
+
+  <section class="add card">
+    <h3>Add user</h3>
+    <form class="grid-form" [formGroup]="addForm" (ngSubmit)="create()">
+      <label>Username
+        <input formControlName="username" placeholder="e.g. alice" />
+        <small class="err" *ngIf="addForm.controls.username.invalid && addForm.controls.username.touched">
+          3–30 characters
+        </small>
+      </label>
+
+      <label>Email
+        <input formControlName="email" type="email" placeholder="name@domain.com" />
+        <small class="err" *ngIf="addForm.controls.email.invalid && addForm.controls.email.touched">
+          Enter a valid email
+        </small>
+      </label>
+
+      <label>Password
+        <input formControlName="password" type="password" placeholder="Min 8 chars" />
+        <small class="err" *ngIf="addForm.controls.password.invalid && addForm.controls.password.touched">
+          Minimum 8 characters
+        </small>
+      </label>
+
+      <label>Role
+        <select formControlName="role">
+          <option>User</option>
+          <option>Admin</option>
+        </select>
+      </label>
+
+      <div class="actions">
+        <button type="submit" class="btn btn-primary" [disabled]="addForm.invalid">Create</button>
+      </div>
+    </form>
+  </section>
+
+  <section class="users card">
+    <h3>All users</h3>
+    <div *ngIf="loading()" class="loading">Loading…</div>
+
+    <div class="table-wrap" *ngIf="!loading()">
+      <table class="tbl">
+        <thead>
+          <tr>
+            <th>Username</th><th>Email</th><th>Role</th><th>Created</th><th class="right"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let u of users()">
+            <ng-container *ngIf="editingId() !== u.id; else editRow">
+              <td class="strong">{{u.username}}</td>
+              <td class="muted">{{u.email}}</td>
+              <td>
+                <span class="badge" [class.badge-admin]="u.role==='Admin'">{{u.role}}</span>
+              </td>
+              <td>{{u.createdAt | date:'mediumDate'}} </td>
+              <td class="right">
+                <button type="button" class="btn" (click)="startEdit(u)">Edit</button>
+                <button type="button" class="btn btn-warn" (click)="remove(u.id)">Delete</button>
+              </td>
+            </ng-container>
+
+            <ng-template #editRow>
+              <td><input [formControl]="editForm.controls.username" /></td>
+              <td><input type="email" [formControl]="editForm.controls.email" /></td>
+              <td>
+                <select [formControl]="editForm.controls.role">
+                  <option>User</option>
+                  <option>Admin</option>
+                </select>
+              </td>
+              <td><input type="password" placeholder="New password (optional)" [formControl]="editForm.controls.newPassword" /></td>
+              <td class="right">
+                <button type="button" class="btn btn-primary" (click)="save()" [disabled]="editForm.invalid">Save</button>
+                <button type="button" class="btn" (click)="cancelEdit()">Cancel</button>
+              </td>
+            </ng-template>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</div>

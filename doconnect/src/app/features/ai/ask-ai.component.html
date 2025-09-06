@@ -1,0 +1,34 @@
+<div class="page ai-page">
+  <h2 class="title">Ask from AI</h2>
+
+  <section class="card">
+    <form class="grid-form" [formGroup]="form" (ngSubmit)="submit()">
+      <label>Question
+        <textarea rows="4" placeholder="Ask anything about your Q/A topic..." formControlName="question"></textarea>
+        <small class="err" *ngIf="form.controls.question.invalid && form.controls.question.touched">
+          3–2000 characters required.
+        </small>
+      </label>
+
+      <label>Optional context
+        <textarea rows="3" placeholder="Add extra details, tags, or code to help AI answer better" formControlName="context"></textarea>
+      </label>
+
+      <div class="actions">
+        <button class="btn btn-primary" type="submit" [disabled]="form.invalid || loading()">Ask AI</button>
+      </div>
+    </form>
+  </section>
+
+  <section class="card" *ngIf="loading()">Thinking… please wait.</section>
+
+  <section class="card" *ngIf="error()">
+    <h3>Error</h3>
+    <div class="err">{{ error() }}</div>
+  </section>
+
+  <section class="card" *ngIf="answer()">
+    <h3>Answer <span class="model" *ngIf="model()">({{ model() }})</span></h3>
+    <div class="answer" [innerText]="answer()"></div>
+  </section>
+</div>

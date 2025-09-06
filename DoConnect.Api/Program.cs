@@ -11,12 +11,23 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using System.Text.Json.Serialization;
+using DoConnect.Api.Options;
+using DoConnect.Api.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("Jwt"));
 
 builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(o => o.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
+
+builder.Services.AddControllers()
+    .AddJsonOptions(o => o.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
+
+builder.Services.Configure<GroqOptions>(builder.Configuration.GetSection("Groq"));
+builder.Services.AddHttpClient<GroqAiService>();
 
 // Needed by Swagger
 builder.Services.AddEndpointsApiExplorer();
