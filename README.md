@@ -93,20 +93,6 @@ dotnet test
 - [x] Postman collection included
 - [x] Test project present 
 
-## 10) Known limits 
-- No rate limiting
-- No real-time notifications (SignalR) yet
-- Image validation (size/type) may be basic depending on your current code
-- Cleanup of orphaned image files may require manual handling if you delete entities
-- Pagination/sorting might be basic or absent (use as-is or adapt per Swagger)
-
-## 11) Future work (nice to have)
-- Real-time notifications for new answers (SignalR)
-- Tags, bookmarks, voting, user profiles
-- Rich moderation tools & audit logs
-- Advanced search & filters
-- Docker + docker-compose for one-command run
-- CI pipeline
 
 ---
 
