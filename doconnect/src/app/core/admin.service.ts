@@ -1,4 +1,4 @@
-// src/app/core/admin.service.ts
+// Here we are implementing the AdminService to handle administrative tasks such as approving/rejecting questions and answers, creating questions and answers, checking admin status, and deleting questions.
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';

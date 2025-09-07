@@ -1,4 +1,4 @@
-// src/app/app.routes.ts
+
 import { Routes } from '@angular/router';
 import { AdminGuard } from './core/admin.guard';
 import { AdminUsersComponent } from './features/admin/admin-users.component';

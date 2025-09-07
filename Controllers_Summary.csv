@@ -1,0 +1,8 @@
+file,routes,http_method_count,authorize_attrs,allow_anonymous
+DoConnect.Api/Controllers/AdminController.cs,['api/admin'],9,"['(Roles = ""Admin"")']",False
+DoConnect.Api/Controllers/AdminUsersController.cs,['api/admin/users'],5,"['(Roles = ""Admin"")']",False
+DoConnect.Api/Controllers/AiController.cs,['api/ai'],1,[''],False
+DoConnect.Api/Controllers/AnswersController.cs,['api/questions/{questionId:guid}/[controller]'],2,[''],False
+DoConnect.Api/Controllers/AuthController.cs,['api/[controller]'],3,[''],False
+DoConnect.Api/Controllers/QuestionsController.cs,['api/[controller]'],3,[''],False
+DoConnect.Api/Controllers/UsersMeController.cs,['api/users/me'],1,[''],False

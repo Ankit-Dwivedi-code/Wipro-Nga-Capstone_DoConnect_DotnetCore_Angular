@@ -1,4 +1,4 @@
-// src/app/core/jwt.interceptor.ts
+// Here we are creating a JWT interceptor to add the JWT token to the Authorization header of outgoing HTTP requests.
 import { Injectable } from '@angular/core';
 import {
   HttpEvent, HttpHandler, HttpInterceptor, HttpRequest

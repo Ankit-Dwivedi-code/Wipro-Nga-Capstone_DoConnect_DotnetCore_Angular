@@ -6,6 +6,7 @@ This is a concise guide for reviewers and users to exercise the app quickly.
 
 - **Admin**
   - Email: `admin@doconnect.local`
+  - Username - `admin`
   - Password: `Admin@123`
   - Use to approve/reject content.
 

@@ -1,4 +1,4 @@
-// src/app/core/auth.guard.ts
+// Here we are creating an AuthGuard to protect routes that require authentication.
 import { Injectable } from '@angular/core';
 import { CanActivate, Router } from '@angular/router';
 import { AuthService } from './auth.service';

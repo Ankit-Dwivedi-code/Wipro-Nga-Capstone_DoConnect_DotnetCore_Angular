@@ -1,4 +1,4 @@
-// src/app/core/admin.guard.ts
+// Here we are creating an AdminGuard to protect routes that require admin privileges.
 import { Injectable } from '@angular/core';
 import { CanActivate, CanMatch, Router, UrlTree, Route, UrlSegment } from '@angular/router';
 import { AuthService } from './auth.service';

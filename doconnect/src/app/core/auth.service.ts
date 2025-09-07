@@ -1,4 +1,4 @@
-// src/app/core/auth.service.ts
+// Here we are implementing the AuthService to handle user authentication, including login, registration, logout, and profile updates.
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, tap } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
@@ -49,9 +49,9 @@ export class AuthService {
   isLoggedIn(): boolean { return !!this.getToken(); }
 
   // ---- profile: update current user ----
-  /**
-   * Update the logged-in user's profile.
-   * Backend endpoint: PUT {apiBase}/users/me
+  /*
+    Update the logged-in user's profile.
+   Backend endpoint: PUT {apiBase}/users/me
    */
   updateMyProfile(payload: {
     username: string;

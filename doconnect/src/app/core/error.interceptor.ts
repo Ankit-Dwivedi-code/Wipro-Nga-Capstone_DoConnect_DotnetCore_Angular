@@ -1,3 +1,5 @@
+// Here we are creating an ErrorInterceptor to handle HTTP errors globally.
+
 import { Injectable } from '@angular/core';
 import {
   HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest

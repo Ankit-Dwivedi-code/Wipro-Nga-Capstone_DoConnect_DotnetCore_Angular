@@ -1,4 +1,4 @@
-// src/app/core/models.ts
+// Here we define interfaces for User, AuthResponse, LoginDto, RegisterDto, QuestionDto, CreateQuestionDto, and AnswerDto.
 export interface User { id?: number; Username?: string; email?: string; role?: string; }
 export interface AuthResponse { token: string; expiresIn?: number; user: User; }
 // Login
