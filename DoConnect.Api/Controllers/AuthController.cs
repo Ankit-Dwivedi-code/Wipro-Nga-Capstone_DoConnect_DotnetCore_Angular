@@ -1,5 +1,8 @@
-// Here we define the AuthController which handles user registration, login, and fetching authenticated user details. It uses JWT for authentication and BCrypt for password hashing.
+// AuthController: returns email in login/register responses and reads /me
+// using multiple possible claim types for robustness.
 
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using DoConnect.Api.Data;
 using DoConnect.Api.Dtos;
 using DoConnect.Api.Models;
@@ -37,7 +40,15 @@ namespace DoConnect.Api.Controllers
             };
             _db.Users.Add(user);
             await _db.SaveChangesAsync();
-            return Created("", new { user.Id, user.Username, user.Email });
+
+            var (token, expires) = _jwt.Create(user);
+
+            return Ok(new
+            {
+                token,
+                expires,
+                user = new { user.Id, user.Username, user.Email, role = user.Role.ToString() }
+            });
         }
 
         [HttpPost("login")]
@@ -50,27 +61,35 @@ namespace DoConnect.Api.Controllers
                 return Unauthorized(new { message = "Invalid credentials" });
 
             var (token, expires) = _jwt.Create(user);
-            return Ok(new { token, expires, user = new { user.Id, user.Username, role = user.Role.ToString() }});
+
+            return Ok(new
+            {
+                token,
+                expires,
+                user = new { user.Id, user.Username, user.Email, role = user.Role.ToString() }
+            });
         }
 
         [Authorize]
         [HttpGet("me")]
         public IActionResult Me()
         {
-            return Ok(new
+            string? Get(params string[] types)
             {
-                // id = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value,
-             id = User.FindFirst("sub")?.Value 
-             ?? User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value,
+                foreach (var t in types)
+                {
+                    var v = User.FindFirst(t)?.Value;
+                    if (!string.IsNullOrWhiteSpace(v)) return v;
+                }
+                return null;
+            }
 
+            var id = Get(JwtRegisteredClaimNames.Sub, ClaimTypes.NameIdentifier) ?? "";
+            var username = Get(ClaimTypes.Name, JwtRegisteredClaimNames.UniqueName, "unique_name") ?? "";
+            var email = Get(JwtRegisteredClaimNames.Email, ClaimTypes.Email, "email") ?? "";
+            var role = Get("role", ClaimTypes.Role) ?? "";
 
-                // username = User.Identity?.Name ?? User.FindFirst("unique_name")?.Value,
-                username = User.FindFirst(System.Security.Claims.ClaimTypes.Name)?.Value
-        ?? User.FindFirst("unique_name")?.Value,
-
-                email = User.FindFirst("email")?.Value,
-                role = User.FindFirst("role")?.Value ?? User.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value
-            });
+            return Ok(new { id, username, email, role });
         }
     }
 }

@@ -46,45 +46,34 @@ $text-light: #e0e0e0;
 
 /* === Ask AI — eye-catching neon gradient button === */
 .ask-ai-btn {
-  /* match your premium dark theme */
-  --g1: #fbc02d;   /* yellow */
-  --g2: #195850;   /* teal   */
-  --g3: #173456;   /* blue   */
+  --g1: #fbc02d;
+  --g2: #195850;
+  --g3: #173456;
 
   position: relative;
   overflow: hidden;
   border-radius: 999px;
   padding: 0.45rem 1rem 0.45rem 0.75rem;
 
-  /* animated gradient fill */
   background: linear-gradient(90deg, var(--g1), var(--g2), var(--g3));
   background-size: 220% 100%;
-  color: #0b0d11 !important;             /* dark text on bright gradient */
+  color: #0b0d11 !important;
   border: 1px solid rgba(255, 255, 255, 0.12);
-  box-shadow:
-    0 10px 24px rgba(0, 0, 0, 0.45),
-    0 0 0 0 rgba(251, 192, 45, 0.0);     /* pulse placeholder */
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.45), 0 0 0 0 rgba(251, 192, 45, 0.0);
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.25);
 
-  transition:
-    transform .18s ease,
-    box-shadow .18s ease,
-    background-position .6s ease;
+  transition: transform .18s ease, box-shadow .18s ease, background-position .6s ease;
 
-  /* hover / focus: lift + stronger glow */
   &:hover,
   &:focus-visible {
     transform: translateY(-1px);
     background-position: 100% 0%;
-    box-shadow:
-      0 14px 34px rgba(0, 0, 0, 0.55),
-      0 0 0 6px rgba(251, 192, 45, 0.12);
+    box-shadow: 0 14px 34px rgba(0, 0, 0, 0.55),
+                0 0 0 6px rgba(251, 192, 45, 0.12);
   }
 
-  /* subtle breathing pulse */
   animation: aiPulse 3.2s ease-in-out infinite;
 
-  /* little sparkle icon on the left */
   .spark {
     margin-right: 8px;
     font-size: 18px;
@@ -92,13 +81,11 @@ $text-light: #e0e0e0;
     filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.35));
   }
 
-  /* Material label gets bold for punch */
   .mdc-button__label, span {
     font-weight: 700;
     letter-spacing: .2px;
   }
 
-  /* glossy overlay for depth */
   &::after {
     content: "";
     position: absolute;
@@ -111,26 +98,13 @@ $text-light: #e0e0e0;
   }
 }
 
-/* keep the button compact inside the toolbar */
 .mat-toolbar .ask-ai-btn { margin-right: .25rem; }
 
-/* Pulse animation */
 @keyframes aiPulse {
-  0%, 100% {
-    box-shadow:
-      0 10px 24px rgba(0, 0, 0, 0.45),
-      0 0 0 0 rgba(96, 165, 250, 0.0);
-    transform: translateY(0);
-  }
-  50% {
-    box-shadow:
-      0 12px 28px rgba(0, 0, 0, 0.5),
-      0 0 0 8px rgba(96, 165, 250, 0.12); /* soft outer ring */
-    transform: translateY(-0.5px);
-  }
+  0%, 100% { box-shadow: 0 10px 24px rgba(0, 0, 0, 0.45), 0 0 0 0 rgba(96, 165, 250, 0.0); transform: translateY(0); }
+  50%      { box-shadow: 0 12px 28px rgba(0, 0, 0, 0.5), 0 0 0 8px rgba(96, 165, 250, 0.12); transform: translateY(-0.5px); }
 }
 
-/* Respect users who prefer reduced motion */
 @media (prefers-reduced-motion: reduce) {
   .ask-ai-btn,
   .ask-ai-btn::after {
@@ -138,5 +112,59 @@ $text-light: #e0e0e0;
     transition: none !important;
     background-position: 0 0 !important;
     box-shadow: 0 10px 24px rgba(0, 0, 0, 0.45) !important;
+  }
+}
+
+/* ====== NEW: responsive wrapper + user dropdown helpers ====== */
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.hamburger {
+  display: none;
+  margin-left: .25rem;
+  color: $text-light;
+}
+
+.user-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+
+  .user-name {
+    max-width: 140px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .chev { font-size: 18px; height: 18px; width: 18px; opacity: .8; }
+}
+
+/* Mobile layout */
+@media (max-width: 820px) {
+  .nav-links {
+    position: absolute;
+    left: 0; right: 0; top: 56px;
+    display: none;
+    flex-direction: column;
+    align-items: stretch;
+    background: #0f1115;
+    border-top: 1px solid rgba(255,255,255,.06);
+    padding: 8px;
+
+    &.open { display: flex; }
+
+    button[mat-button], a[mat-button], .ask-ai-btn {
+      justify-content: flex-start;
+      text-align: left;
+      margin-left: 0 !important;
+    }
+  }
+
+  .hamburger {
+    display: inline-flex;
+    margin-left: .25rem;
   }
 }

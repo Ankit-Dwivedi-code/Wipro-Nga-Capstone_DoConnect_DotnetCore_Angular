@@ -5,6 +5,9 @@ import { AdminUsersComponent } from './features/admin/admin-users.component';
 import { AskAiComponent } from './features/ai/ask-ai.component';
 import { AuthGuard } from './core/auth.guard';
 
+// NEW: profile page (standalone)
+import { ProfileComponent } from './features/profile/profile.component';
+
 export const routes: Routes = [
   { path: 'auth', loadChildren: () => import('./features/auth/auth.routes').then(m => m.AUTH_ROUTES) },
   { path: 'questions', loadChildren: () => import('./features/questions/questions.routes').then(m => m.QUESTIONS_ROUTES) },
@@ -20,8 +23,9 @@ export const routes: Routes = [
 
   { path: 'ask-ai', component: AskAiComponent, canActivate: [AuthGuard] },
 
+  // NEW: profile (user self-service)
+  { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
+
   { path: '', redirectTo: 'questions', pathMatch: 'full' },
   { path: '**', redirectTo: 'questions' },
-
- 
 ];

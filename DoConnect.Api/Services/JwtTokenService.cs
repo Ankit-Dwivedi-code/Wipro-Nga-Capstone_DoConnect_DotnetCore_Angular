@@ -1,5 +1,6 @@
 // Using C# 13.0 features
-// Here we define the JwtTokenService which is responsible for creating JWT tokens for authenticated users. It uses settings defined in JwtSettings for token configuration such as key, issuer, audience, and expiration time.
+// JwtTokenService creates JWTs and now includes Name + multiple Email/Role claims
+// so /api/Auth/me (and your frontend) can always read them reliably.
 
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -25,25 +26,39 @@ namespace DoConnect.Api.Services
 
         public (string token, DateTime expires) Create(User user)
         {
-            var claims = new[]
+            var claims = new List<Claim>
             {
-                new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
-                new Claim(JwtRegisteredClaimNames.UniqueName, user.Username),
-                new Claim(JwtRegisteredClaimNames.Email, user.Email),
-                new Claim(ClaimTypes.Role, user.Role.ToString()),
-                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
+                // IDs
+                new(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
+                new(ClaimTypes.NameIdentifier, user.Id.ToString()),
+
+                // Name (in multiple common types)
+                new(ClaimTypes.Name, user.Username),
+                new(JwtRegisteredClaimNames.UniqueName, user.Username),
+
+                // Email (in multiple common types)
+                new(JwtRegisteredClaimNames.Email, user.Email),
+                new(ClaimTypes.Email, user.Email),
+                new("email", user.Email),
+
+                // Role (in multiple common types)
+                new(ClaimTypes.Role, user.Role.ToString()),
+                new("role", user.Role.ToString())
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_cfg.Key));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-            var expires = DateTime.UtcNow.AddMinutes(_cfg.ExpiresMinutes);
+            var now = DateTime.UtcNow;
+            var expires = now.AddMinutes(_cfg.ExpiresMinutes);
 
             var token = new JwtSecurityToken(
                 issuer: _cfg.Issuer,
                 audience: _cfg.Audience,
                 claims: claims,
+                notBefore: now,
                 expires: expires,
-                signingCredentials: creds);
+                signingCredentials: creds
+            );
 
             return (new JwtSecurityTokenHandler().WriteToken(token), expires);
         }

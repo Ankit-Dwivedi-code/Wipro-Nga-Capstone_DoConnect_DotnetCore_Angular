@@ -16,6 +16,7 @@ export class AuthService {
     if (raw) this.userSub.next(JSON.parse(raw));
   }
 
+  // ---- auth core ----
   login(dto: LoginDto) {
     return this.http.post<AuthResponse>(`${this.api}/login`, dto).pipe(
       tap(res => {
@@ -42,15 +43,29 @@ export class AuthService {
     this.userSub.next(null);
   }
 
-  getToken(): string | null {
-    return localStorage.getItem('dc_token');
-  }
+  // ---- helpers ----
+  getToken(): string | null { return localStorage.getItem('dc_token'); }
+  getUser(): User | null { return this.userSub.value; }
+  isLoggedIn(): boolean { return !!this.getToken(); }
 
-  getUser(): User | null {
-    return this.userSub.value;
-  }
-
-  isLoggedIn(): boolean {
-    return !!this.getToken();
+  // ---- profile: update current user ----
+  /**
+   * Update the logged-in user's profile.
+   * Backend endpoint: PUT {apiBase}/users/me
+   */
+  updateMyProfile(payload: {
+    username: string;
+    email: string;
+    currentPassword?: string | null;
+    newPassword?: string | null;
+  }) {
+    const url = `${environment.apiUrl}/users/me`;
+    return this.http.put<{ message: string; user: User }>(url, payload).pipe(
+      tap(res => {
+        // persist new user data locally so navbar/profile reflect changes immediately
+        localStorage.setItem('dc_user', JSON.stringify(res.user));
+        this.userSub.next(res.user);
+      })
+    );
   }
 }

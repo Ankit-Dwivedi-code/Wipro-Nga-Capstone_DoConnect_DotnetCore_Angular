@@ -1,0 +1,119 @@
+<div class="page">
+  <!-- Header card -->
+  <section class="card hero" *ngIf="!loading(); else skeleton">
+    <div class="avatar" aria-hidden="true">{{ initials() }}</div>
+
+    <div class="who">
+      <h2 class="name">
+        <mat-icon class="ic">person</mat-icon>
+        {{ me().username || '—' }}
+      </h2>
+
+      <div class="email">
+        <mat-icon class="ic">mail</mat-icon>
+        {{ currentEmail() || '—' }}
+      </div>
+
+      <div class="role" [class.admin]="me().role === 'Admin'">
+        <mat-icon class="ic">verified_user</mat-icon>
+        {{ me().role || '—' }}
+      </div>
+    </div>
+  </section>
+
+  <!-- Shimmer while loading -->
+  <ng-template #skeleton>
+    <section class="card hero skeleton">
+      <div class="avatar shimmer"></div>
+      <div class="who">
+        <div class="line shimmer"></div>
+        <div class="line shimmer small"></div>
+        <div class="pill shimmer"></div>
+      </div>
+    </section>
+  </ng-template>
+
+  <!-- Editor -->
+  <section class="card editor">
+    <h3>Edit details</h3>
+
+    <form [formGroup]="form" class="grid">
+      <label>
+        <span>Username</span>
+        <input formControlName="username" placeholder="Your name" />
+        <small class="err" *ngIf="form.controls.username.touched && form.controls.username.invalid">
+          3–30 characters required.
+        </small>
+      </label>
+
+      <label>
+        <span>Email</span>
+        <input type="email" formControlName="email" placeholder="name@domain.com" />
+        <small class="err" *ngIf="form.controls.email.touched && form.controls.email.invalid">
+          Enter a valid email.
+        </small>
+      </label>
+
+      <!-- Primary save for profile fields -->
+      <div class="actions">
+        <button
+          mat-raised-button
+          color="primary"
+          type="button"
+          (click)="submit(true)"
+          [disabled]="form.invalid || saving()"
+        >
+          <mat-icon class="ic" *ngIf="!saving()">save</mat-icon>
+          <mat-icon class="ic spin" *ngIf="saving()">autorenew</mat-icon>
+          {{ saving() ? 'Saving…' : 'Save changes' }}
+        </button>
+      </div>
+
+      <!-- Password toggle -->
+      <div class="pw-toggle">
+        <button type="button" mat-stroked-button color="accent" class="pw-btn" (click)="showPw.set(!showPw())">
+          <mat-icon class="ic">{{ showPw() ? 'close' : 'lock' }}</mat-icon>
+          {{ showPw() ? 'Cancel password change' : 'Change password…' }}
+        </button>
+      </div>
+
+      <!-- Password editor -->
+      <div class="pw" *ngIf="showPw()">
+        <label>
+          <span>Current password</span>
+          <input type="password" formControlName="currentPassword" placeholder="Current password" />
+          <small class="err" *ngIf="form.controls.currentPassword.touched && form.controls.currentPassword.invalid">
+            Required when setting a new password.
+          </small>
+        </label>
+
+        <label>
+          <span>New password</span>
+          <input type="password" formControlName="newPassword" placeholder="Min 8 characters" />
+          <small class="hint">Leave blank to keep your current password.</small>
+        </label>
+
+        <!-- Contextual save for password change -->
+        <div class="actions pw-actions">
+          <button
+            mat-raised-button
+            color="warn"
+            type="button"
+            (click)="submit()"
+            [disabled]="form.invalid || saving() || !form.value.newPassword"
+            aria-label="Save new password"
+          >
+            <mat-icon class="ic" *ngIf="!saving()">password</mat-icon>
+            <mat-icon class="ic spin" *ngIf="saving()">autorenew</mat-icon>
+            {{ saving() ? 'Saving…' : 'Update password' }}
+          </button>
+        </div>
+      </div>
+
+      <div class="messages">
+        <div class="ok" *ngIf="ok()">{{ ok() }}</div>
+        <div class="err" *ngIf="err()">{{ err() }}</div>
+      </div>
+    </form>
+  </section>
+</div>
