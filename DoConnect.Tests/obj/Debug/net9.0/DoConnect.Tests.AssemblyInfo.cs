@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("DoConnect.Tests")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+11ddfd196b7d271493a54e23dd2cfa9c8a78a35c")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3878bc41375c52ebbd65636dde32f8018631f3b0")]
 [assembly: System.Reflection.AssemblyProductAttribute("DoConnect.Tests")]
 [assembly: System.Reflection.AssemblyTitleAttribute("DoConnect.Tests")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

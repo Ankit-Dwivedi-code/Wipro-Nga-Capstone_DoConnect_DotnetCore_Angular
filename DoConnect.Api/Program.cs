@@ -13,7 +13,6 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text.Json.Serialization;
 using DoConnect.Api.Options;
-using DoConnect.Api.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
